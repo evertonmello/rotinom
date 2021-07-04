@@ -1,0 +1,59 @@
+<div class="detalhe">
+    <div class="header">
+        <h1>Detalhes do Serviço</h1>
+    </div>
+    <div class="info">
+        <div>
+            <span>{{servicoSelecionado.locatarioNome}}</span>
+            <span>Id do serviço: {{servicoSelecionado.id}}</span>
+            <span>Id do locatário: {{servicoSelecionado.locatarioId}}</span>
+            <button (click)="openGalery()" class="manage-files">
+                Gerenciar imagens
+                <mat-icon>cloud_upload</mat-icon>
+            </button>
+        </div>
+        <div>
+            <span>{{servicoSelecionado.veiculoPlaca}}</span>
+            <span>{{servicoSelecionado.veiculoResgateGrupoTipoDescricao}} | {{servicoSelecionado.veiculoResgateTipoDescricao}} </span>
+            <div (click)="abriWhatsapp(servicoSelecionado)" class="fone-container image">
+                <img src="assets/img/whatsapp-logo-icone.png" width="20" alt="">
+                <span> {{' ' + servicoSelecionado.locatarioTelefone.ddd +
+                    servicoSelecionado.locatarioTelefone.numero}}</span>
+            </div>
+            <span class="warning"
+                [ngClass]="{'high': servicoSelecionado.veiculoResgateTipoPrioridade == 2,
+                'medium': servicoSelecionado.veiculoResgateTipoPrioridade == 3,'low': servicoSelecionado.veiculoResgateTipoPrioridade == 4}">
+                <mat-icon>warning</mat-icon>
+                <label *ngIf="servicoSelecionado.veiculoResgateTipoPrioridade == 1">Altíssima</label>
+                <label *ngIf="servicoSelecionado.veiculoResgateTipoPrioridade == 2">Alta</label>
+                <label *ngIf="servicoSelecionado.veiculoResgateTipoPrioridade == 3">Média</label>
+                <label *ngIf="servicoSelecionado.veiculoResgateTipoPrioridade == 4">Baixa</label>
+            </span>
+        </div>
+    </div><br>
+    <div class="info-2-ctn">
+        <span>Previsão: {{servicoSelecionado.veiculoResgateTipoTempo}} min</span>
+        <span>Tempo decorrido: {{getDateDiff(servicoSelecionado.dataConclusao, servicoSelecionado.dataAbertura)}} min</span>
+        <span>Observação: {{servicoSelecionado.observacao}}</span>
+    </div>
+    <div class="buttons-ctn">
+        <div style="display: flex; align-items: center;">
+            <div style="width: 140px;">
+                <span>Atribuir Serviço para:</span>
+                <select [(ngModel)]="veiculoSuporteIdSelectd" name="" id="">
+                    <option  *ngFor="let item of veiculosSuporte; let i = index" value="{{item.veiculoSuporteId}}">
+                        {{item.veiculoSuporteApelido + ' - Est: ' }}
+                         {{estimativas[i] || ' '}} min
+                    </option>
+                </select>
+            </div>
+            <button (click)="escalar()" mat-raised-button color="primary">Confirmar</button>
+        </div>
+        <div>
+            <button (click)="cancelarServico()" class="cancela">CANCELAR SERVIÇO</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

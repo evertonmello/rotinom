@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>{{data.message.title}}</h1>
+<div mat-dialog-content>
+    <h3>{{data.message.body}}</h3>
+</div>
+<div mat-dialog-actions>
+    <button *ngIf="data.data != -1" mat-button [mat-dialog-close]="true" cdkFocusInitial>SIM</button>    
+    <button *ngIf="data.data == 0" mat-button [mat-dialog-close]= "false" cdkFocusInitial>NÃO</button>
+    <button *ngIf="data.data != -1"  mat-button (click)="onNoClick()" cdkFocusInitial>CANCELAR</button>
+    <button *ngIf="data.data == -1" mat-button (click)="onNoClick()" cdkFocusInitial>OK</button>
+</div>

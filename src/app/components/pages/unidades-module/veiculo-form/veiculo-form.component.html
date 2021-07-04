@@ -1,0 +1,41 @@
+<div class="overlay">
+    <form [formGroup]="veiculoForm" (ngSubmit)="save()">
+        <mat-icon (click)="close()">close</mat-icon>
+        <h1>{{veiculo? 'Editar Veículo': 'Novo Veículo'}}</h1>
+
+        <mat-form-field class="input-container">
+            <input formControlName="placa" type="text" matInput placeholder="Placa">
+        </mat-form-field>
+        <mat-form-field class="input-container">
+            <input formControlName="iotId" type="number" matInput placeholder="Lot Iot">
+        </mat-form-field>
+        <mat-form-field class="input-container">
+            <input formControlName="chassi" type="text" matInput placeholder="Chassi">
+        </mat-form-field>
+        <mat-form-field class="input-container">
+            <input formControlName="renavam" type="text" matInput placeholder="Renavam">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Cor</mat-label>
+            <mat-select formControlName="cor">
+                <mat-option [value]="'PRETA'">Preta</mat-option>
+                <mat-option [value]="'BRANCA'">Branca</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Porta de bloqueio</mat-label>
+            <mat-select formControlName="outputIot">
+                <mat-option [value]="1">1</mat-option>
+                <mat-option [value]="2">2</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <button mat-raised-button color="primary" [disabled]="veiculoForm.status != 'VALID'" class="pesquisar-btn">
+        {{veiculo? 'Salvar' : 'Cadastrar'}} 
+        </button>
+    </form>
+</div>
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

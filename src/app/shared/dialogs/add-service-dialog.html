@@ -1,0 +1,42 @@
+<form [formGroup]="resgateForm">
+    <mat-form-field>
+        <mat-label>Serviço</mat-label>
+        <mat-select formControlName="servico">
+            <mat-option [value]="1"> Suporte de Campo</mat-option>
+            <mat-option [value]="2">Recolhimento</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-label>Motivo</mat-label>
+        <mat-select formControlName="veiculoResgateTipoId">
+            <div *ngIf="resgateForm.controls.servico.value == 1">
+                <mat-option *ngFor="let motivo of motivosSuportCampo" [value]="motivo.value">{{motivo.label}}
+                </mat-option>
+            </div>
+            <div *ngIf="resgateForm.controls.servico.value == 2">
+                <mat-option *ngFor="let motivo of motivosSuporteRecolhimentio" [value]="motivo.value">{{motivo.label}}
+                </mat-option>
+            </div>
+        </mat-select>
+    </mat-form-field>
+
+    <button (click)="addService()" mat-raised-button color="primary">Adicionar</button>
+    <br>
+    <div>
+        <div *ngFor="let service of suporteItens" class="servive-item-cnt" >
+            <div class="child-service">
+                {{service.gupoTipoDescricao}} | {{service.tipoDescricao}}
+            </div>
+            <div class="child-service">
+                <mat-icon (click)="add()">add</mat-icon>
+                <mat-icon (click)="remove()">remove</mat-icon>
+                <mat-icon (click)="delete(service.id)">delete</mat-icon>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

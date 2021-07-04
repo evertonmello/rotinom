@@ -1,0 +1,14 @@
+<div style="max-height: 540px;">
+    <h1>Histórico de Ordens</h1>
+
+    <mat-vertical-stepper linear #stepper>
+        <mat-step *ngFor="let item of data" [editable]="false">
+            <ng-template matStepLabel>
+                <span><b>Ordem de {{item.tipo == 1? 'bloqueio': 'desbloqueio'}}: </b> {{item.origem}}</span><br>
+                <span><b>Criação: </b>{{item.criacaoData |  date:'medium'}}</span><br>
+                <span *ngIf="item.efetivacaoData"><b>Efetivação:</b>  {{item.efetivacaoData |  date:'medium'}}</span>
+                <button (click)="cancelarOrdem(item)" mat-raised-button color="warn">Cancelar</button>
+            </ng-template>
+        </mat-step>
+      </mat-vertical-stepper>
+</div>

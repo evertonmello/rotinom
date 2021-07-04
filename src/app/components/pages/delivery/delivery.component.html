@@ -1,0 +1,214 @@
+<div class="main-monitor">
+    <div class="lista-container" [ngClass]="{'hiden': !showSideBar}">
+        <div (click)="setSideBarView()" class="show-hide-ctn" [ngClass]="{'hiden': !showSideBar }">
+            <mat-icon *ngIf="showSideBar">keyboard_arrow_left</mat-icon>
+            <mat-icon *ngIf="!showSideBar">keyboard_arrow_right</mat-icon>
+        </div>
+        <div class="tab-container" [ngClass]="{'hide': !showSideBar}">
+            <div *ngIf="!showDetalhe">
+                <mat-icon class="search-icon">search</mat-icon>
+                <input [(ngModel)]="veiculoSelecionadoPesq" [value]="veiculoSelecionadoPesq || ''" type="text"
+                    placeholder="Pesquise por entregador ou lojista" (keyup)="searchItem()" class="input-container">
+                <div class="veiculosStatus">
+                    <label for="cars">Filtro:</label>
+                    <select (change)="dropdownFilter()" [(ngModel)]="filterSelected" name="cars" id="cars">
+                        <option value="all">Todos</option>
+                        <option value="on">Entregadores Online</option>
+                        <option value="off">Entregadores Offline</option>
+                        <option value="hasDelivered">Já realizou entrega</option>
+                        <option value="neverDelivered">Nunca realizou entrega</option>
+                        <option value="stores">Lojas</option>
+                    </select>
+                    <img (click)="refresh()" src="assets/img/syncbb.svg" class="refresh-icon" alt="atualizar">
+                    <div class="view-options-container">
+                        <input [(ngModel)]="showAllEntregadores" class="ipt-support" id="showAll" type="checkbox">
+                        <label for="showAll">Mostrar motos</label>
+                        <input [(ngModel)]="showAllStores" class="ipt-support" id="showSupport" type="checkbox">
+                        <label for="showSupport">Mostrar lojistas</label>
+                    </div>
+                </div>
+            </div>
+            <div class="radio-container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                [scrollWindow]="false" (scrolled)="manageScroll()">
+                <div *ngFor="let item of resumeListItens | slice: 0 : 100 ; trackBy: trackByFn" class="veiculo-item" [ngClass]="{'detalhe': showDetalhe}">
+                    <div *ngIf="item" (click)="searchVeiculo(item)" style="padding: 16px 24px;display: flex;
+                    flex-direction: column;">
+                        <div class="name-container">
+                            <img *ngIf="!item.remetenteId && item.status?.online && item.status?.entregas.length != 0"
+                                width="14" height="16" src="assets/img/eagle-silhouette-in-flight.svg">
+                            <img *ngIf="!item.remetenteId && item.status?.online && item.status?.entregas.length == 0"
+                                width="14" height="16" src="assets/img/wifi.svg">
+                            <img *ngIf="!item.remetenteId && !item.status?.online" width="16" height="16"
+                                src="assets/img/wifi-off.svg">
+                            <img *ngIf="item.remetenteId" src="assets/img/store.svg" width="16" height="16" alt="loja">
+                            <span class="desc-veiculo name">
+                                {{item.id || item.remetenteId}} - {{ item.nome}} </span>
+                        </div>
+                        <span *ngIf="!item.remetenteId" class="desc-veiculo placa">{{item.status?.online? 'Online':
+                            'Offline'}}</span>
+                        <span *ngIf="!item.remetenteId" class="desc-veiculo placa">{{item.status?.entregas.length == 0?
+                            'Nunca fez entrega': 'Já fez entrega'}}</span>
+                        <span *ngIf="item.remetenteId" class="desc-veiculo placa">{{item.entregas.length}}
+                            entregas</span>
+                        <div *ngIf="!item.remetenteId" class="delivery-container">
+                            <span *ngFor="let entrega of item.status?.entregas; trackBy: trackByFn" class="desc-veiculo placa">
+                                <span class="pending"></span>
+                                {{entrega.endereco?.rua + ', ' + entrega.endereco?.numero + ', ' +
+                                entrega.endereco?.bairro}}
+                            </span>
+                        </div>
+                        <span *ngIf="item.remetenteId" class="desc-veiculo placa">
+                            <span class="loja-ico"></span>
+                            {{item.endereco?.rua + ', ' + item.endereco?.numero + ', ' + item.endereco?.bairro}}
+                        </span>
+                    </div>
+                </div> 
+            </div>
+
+        </div>
+    </div>
+    <div class="map-container" [ngClass]="{'hiden': !showSideBar}">
+        <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [styles]="mapStyles" (mapReady)="onMapLoad($event)">
+            <agm-marker-cluster [gridSize]="80" [styles]="clusterStyles">
+                <div *ngFor="let item of defaultMapItens; trackBy: trackByFn">
+                    <agm-marker *ngIf="item.remetenteId && showAllStores || !item.remetenteId && showAllEntregadores"
+                        (markerClick)="searchVeiculo(item)" [markerClickable]="true"
+                        [latitude]="item.veiculo?.latitude || item.endereco?.latitude"
+                        [longitude]="item.veiculo?.longitude  || item.endereco?.longitude" [iconUrl]="{
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 7,
+                            fillColor: getItemMapColor(item) ,
+                            fillOpacity: 0.9,
+                            strokeWeight: 1
+                        }">
+                    </agm-marker>
+                    <agm-circle *ngIf="showDetalhe && itemSelecionado && itemSelecionado.remetenteId &&
+                     itemSelecionado.remetenteId == item.remetenteId" [latitude]="itemSelecionado.endereco?.latitude"
+                        [longitude]="itemSelecionado.endereco?.longitude" [radius]="7000" [fillColor]="'blue'">
+                    </agm-circle>
+                </div>
+            </agm-marker-cluster>
+            <div *ngIf="showDetalhe">
+                <agm-polyline *ngFor="let point of historicoCoordinates;let i = index;" [strokeColor]="point.color"
+                    [strokeWeight]="1">
+                    <agm-polyline-point [latitude]="point.lat" [longitude]="point.lng">
+                    </agm-polyline-point>
+                    <ng-container *ngIf="historicoCoordinates[i+1]">
+                        <agm-polyline-point [latitude]="historicoCoordinates[i+1].lat"
+                            [longitude]="historicoCoordinates[i+1].lng">
+                        </agm-polyline-point>
+                        <agm-icon-sequence [fixedRotation]="false" [repeat]="'50px'" [offset]="100"
+                            [path]="'FORWARD_CLOSED_ARROW'">
+                        </agm-icon-sequence>
+                    </ng-container>
+                </agm-polyline>
+            </div>
+            <agm-marker *ngIf="showDetalhe && itemSelecionado && itemSelecionado.remetenteId"
+                [latitude]="itemSelecionado.endereco?.latitude" [longitude]="itemSelecionado.endereco?.longitude"
+                [iconUrl]="{
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 7,
+                fillColor: getItemMapColor(itemSelecionado) ,
+                fillOpacity: 0.9,
+                strokeWeight: 1
+            }">
+            </agm-marker>
+        </agm-map>
+        <div *ngIf="showDetalhe && itemSelecionado" class="moto-detail" [ngClass]="{'show': showDetalhe}">
+            <div class="back-container">
+                <mat-icon (click)="fecharDetalhe()" class="closeIco" [ngClass]="{'hiden': !showSideBar }">
+                    keyboard_backspace
+                </mat-icon>
+            </div>
+            <div class="moto-detail-item">
+                <div class="detail-user-container">
+                    <img *ngIf="!itemSelecionado.remetenteId && itemSelecionado.status?.online && itemSelecionado.status?.entregas.length != 0"
+                        width="14" height="16" src="assets/img/eagle-silhouette-in-flight.svg">
+                    <img *ngIf="!itemSelecionado.remetenteId && itemSelecionado.status?.online && itemSelecionado.status?.entregas.length == 0"
+                        width="14" height="16" src="assets/img/wifi.svg">
+                    <img *ngIf="!itemSelecionado.remetenteId && !itemSelecionado.status?.online" width="16" height="16"
+                        src="assets/img/wifi-off.svg">
+                    <img *ngIf="itemSelecionado.remetenteId" src="assets/img/store.svg" width="16" height="16"
+                        alt="loja">
+                    <a href="https://admin.mottu.com.br/CustomerSuccess?usuarioId={{itemSelecionado?.responsavelId}}"
+                        target="_blank">
+                        <span class="detail link">
+                            {{itemSelecionado?.id || itemSelecionado?.remetenteId }} - {{ itemSelecionado?.nome}}
+                        </span>
+                    </a>
+                </div>
+                <span *ngIf="!itemSelecionado.remetenteId" class="desc-veiculo placa">{{itemSelecionado.status?.online?
+                    'Online': 'Offline'}}</span>
+                <span *ngIf="!itemSelecionado.remetenteId"
+                    class="desc-veiculo placa">{{itemSelecionado.status?.entregas.length == 0? 'Nunca fez entrega': 'Já
+                    fez entrega'}}</span>
+                <span *ngIf="itemSelecionado.remetenteId"
+                    class="desc-veiculo placa">{{itemSelecionado.entregas?.length}}
+                    entregas</span>
+                <span *ngIf="itemSelecionado.remetenteId" class="desc-veiculo placa">
+                    <span class="loja-ico dtl"></span>
+                    {{itemSelecionado.endereco?.rua + ', ' + itemSelecionado.endereco?.numero + ', ' +
+                    itemSelecionado.endereco?.bairro}}
+                </span>
+                <span title="Abrir Conversa no Whatsapp" (click)="abriWhatsapp()" class="detail link"
+                    style="cursor: pointer;display: contents;text-decoration: underline;">
+                    {{itemSelecionado?.telefones[0].ddd + itemSelecionado?.telefones[0].numero}}
+                    <img *ngIf="!itemSelecionado.remetenteId" src="assets/img/whatsapp-logo-icone.png" width="12" alt=""
+                        style="vertical-align: -5%;">
+                </span>
+
+            </div>
+            <div class="moto-detail-item">
+                <a target="_blank" class="google-link" href="{{getGoogleUrl()}}">
+                    <p>
+                        <b class="google-link">Localização Google</b> <img src="assets/img/maps.png" width="12" alt="">
+                    </p>
+                </a><br>
+                <span *ngIf="itemSelecionado.veiculo" class="detail"><b>Data último Ping:
+                    </b>{{itemSelecionado.veiculo.dataLocalizacao | date:'medium'}}</span><br>
+            </div>
+            <div class="moto-detail-item">
+                <span>Entregas:</span>
+                <span><b>Total de entregas (últimos 7 dias): </b>{{itemSelecionado.detalhe?.totalEntregasRecentes}}
+                </span>
+                <span *ngIf="!itemSelecionado.remetenteId"><b>Tempo médio online:
+                    </b>{{itemSelecionado.detalhe?.mediaHorasOnline}}</span>
+                <span *ngIf="itemSelecionado.remetenteId"><b>Entregas aguardando coleta:
+                    </b>{{itemSelecionado.detalhe?.totalEntregasAguardando}}</span>
+                <span *ngIf="itemSelecionado.remetenteId"><b>Entregas em trânsito:
+                    </b>{{itemSelecionado.detalhe?.totalEntregasEmRota}}</span>
+                <span><b>Primeira entrega: </b>{{itemSelecionado.detalhe?.dataPrimeiraEntrega | date:
+                    'shortDate'}}</span>
+                <span><b>Última entrega: </b>{{itemSelecionado.detalhe?.dataUltimaEntrega | date:
+                    'shortDate'}}</span>
+            </div>
+            <div *ngIf="!itemSelecionado.remetenteId" class="moto-detail-item">
+                <span>Histórico de localização</span><br>
+                <div class="calendar-container">
+                    <mat-form-field class="calendar">
+                        <mat-label>Selecione o período</mat-label>
+                        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                            <input matStartDate formControlName="start" placeholder="Data Início">
+                            <input matEndDate formControlName="end" placeholder="Data Fim">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker maxRange=7 #picker></mat-date-range-picker>
+                    </mat-form-field>
+                    <button (click)="getVeiculoHistorico(itemSelecionado)" mat-raised-button
+                        [disabled]="!range.valid">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="search-location-container">
+    <input type="text" id="autocomplete" class="search-location-input" [ngClass]="{'showLocationFinder': !showSideBar}"
+        placeholder="Digite um endereço com número">
+    <mat-icon class="search-icon-location">search</mat-icon>
+</div>
+<div *ngIf="showDetalhe" (click)="recenter()" class="recenter-container">
+    <mat-icon> near_me</mat-icon>
+</div>
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

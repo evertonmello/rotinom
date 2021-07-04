@@ -1,0 +1,578 @@
+mat-radio-button {
+  margin: 5px;
+  color: #fff;
+}
+.show-hide-ctn {
+  position: absolute;
+  z-index: 5;
+  height: 50px;
+  top: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px #b7b7b773;
+  color: #fff;
+  right: -1.005pc;
+  background-color: #000000db;
+
+  &.hiden {
+    border: none;
+    box-shadow: none;
+    width: 100%;
+    right: 0;
+  }
+}
+.main-monitor {
+  display: flex;
+  width: 100%;
+  position: fixed;
+  height: 100%;
+}
+
+.lista-container {
+  height: 100%;
+  background-color: black;
+  height: 100%;
+  width: 350px;
+  position: relative;
+
+  &.hiden {
+    width: 50px;
+    .moto-detail {
+      display: none;
+    }
+  }
+}
+
+.tab-container {
+  overflow: hidden;
+  height: 100%;
+  margin-right: 10px;
+  padding-right: 0;
+}
+
+.veiculosStatus {
+  padding-left: 15px;
+  span {
+    margin-left: 0;
+  }
+}
+
+.veiculo-item {
+  height: 80px;
+  cursor: pointer;
+  display: block;
+  background-color: #202722;
+  margin-bottom: 2px;
+  &.detalhe {
+    display: none;
+  }
+}
+
+.radio-container {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 360px;
+  height: 80%;
+  margin-top: 10px;
+  mat-icon {
+    font-size: 16px;
+    width: 12px;
+  }
+}
+
+
+
+.ipt-support{
+  color: #fff;
+  margin-left: 16px;
+  width: 16px;
+  height: 16px;
+}
+.ipt-support:first-child{
+  margin-left: 0;
+}
+.violacao-ctn {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.violao-lbl {
+  color: red;
+  font-weight: bold;
+}
+
+.radio-container-group {
+  display: table-caption;
+  max-width: 330px;
+}
+.desc-veiculo {
+  vertical-align: 25%;
+  font-size: 14px;
+  &.name {
+    margin-left: 5px;
+  }
+  &.placa {
+    width: 70px;
+    display: inline-block;
+  }
+}
+
+::-webkit-input-placeholder {
+  color: #fff;
+}
+
+:-ms-input-placeholder {
+  color: #fff;
+}
+
+::placeholder {
+  color: #b6b6b6c9;
+}
+
+.input-container {
+  width: 100%;
+  position: relative;
+  font-size: 15px;
+  margin-bottom: 10px;
+  height: 48px;
+  padding-left: 15px;
+  background-color: #202722;
+  outline: none;
+  border: none;
+  padding-left: 56px;
+  color: #FFF;
+
+}
+
+select {
+  background-color: black;
+  color: #fff;
+  margin-left: 15px;
+  border-radius: 4px;
+  padding: 4px;
+  width: 182px;
+  height: 34px;
+  border: 1px solid #fff;
+  outline: none;
+}
+
+.search-btn {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+
+agm-map {
+  height: 100%;
+  width: 100%;
+}
+
+b,
+p,
+span {
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+}
+
+.disponiveis {
+  background-color: #84e084;
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-left: 10px;
+  &.block {
+    background-color: #ec5a5a;
+  }
+}
+
+.google-link {
+  color: #fff;
+  margin-top: 5px;
+
+  p {
+    margin-top: 15px;
+  }
+}
+
+.map-container {
+  width: 100%;
+  z-index: 1;
+  position: fixed;
+  left: 342px;
+  height: 100%;
+
+  &.hiden {
+    left: 50px;
+    .moto-detail {
+      display: none;
+    }
+  }
+}
+
+.moto-detail {
+  display: none;
+  overflow: auto;
+  &.show {
+    margin-top: 32px;
+    height: 215px;
+    overflow: auto;
+    overflow-x: hidden;
+    position: fixed;
+    left: 0;
+    top: 75px;
+    height: 600px;
+    width: 344px;
+    display: block;
+    height: calc(100% - 190px);
+  }
+}
+
+.moto-detail-item {
+  color: #fff !important;
+  font-size: 12px;
+  margin: 5px 5px 5px 0 !important;
+  border-bottom: 1px solid #696969a6;
+  padding: 16px 0;
+  padding-left: 24px;
+  span {
+    margin-bottom: 8px;
+  }
+  &.alerta {
+    overflow: hidden;
+    padding-right: 24px;
+  }
+
+  &.estimativa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.alertas-container {
+  width: 100%;
+  position: absolute;
+  max-height: 130px;
+  padding-right: 23px;
+  overflow: auto;
+  overflow-y: scroll;
+  overflow-y: scroll;
+}
+
+.moto-detail-item:first-child {
+  padding-top: 12px;
+}
+
+.moto-detail-item:last-child {
+  border-left: 1px solid grey;
+  padding-left: 15px;
+  border-bottom: none !important;
+  height: 140px;
+  margin-bottom: 0 !important;
+}
+
+.block-buttons-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 10px;
+  color: #fff;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 342px;
+  background-color: black;
+  padding-bottom: 16px;
+}
+
+.detail {
+  display: block;
+  height: 13px;
+
+  &.link {
+    text-decoration: underline;
+    cursor: pointer;
+    height: auto;
+  }
+}
+
+.detail-title {
+  font-size: 14px !important;
+  font-weight: bold;
+  margin-bottom: 5px !important;
+}
+
+.back-container {
+  position: fixed;
+  left: 0;
+  top: 64px;
+  width: 342px;
+  background-color: #202722;
+  height: 48px;
+
+  mat-icon {
+    margin-left: 16px;
+    margin-top: 14px;
+  }
+}
+.closeIco {
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  &.hiden {
+    display: none;
+  }
+}
+.support-container{
+  display: flex;
+  flex-direction: column;
+}
+.calendar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 12px;
+  padding: 0 5px 10px 5px;
+}
+.calendar {
+  color: #fff;
+  width: 150px;
+  margin: 10px 0 -10px 0;
+  * {
+    color: #fff;
+  }
+}
+
+
+
+.block-detail {
+  display: flex;
+  align-content: space-around;
+}
+.block-detail > div {
+  width: 50%;
+}
+
+.botao-bloquear {
+  background-color: #14ba94;
+  padding: 7px 16px;
+  border-radius: 15px;
+  margin: 7px 0 11px 0;
+  display: block;
+  width: 100px;
+  text-align: center;
+  font-size: 14px;
+  cursor: pointer;
+  &.mobile {
+    width: 55px;
+  }
+
+  &.estimar {
+    background-color: black;
+    border: 1px solid #fff;
+    color: #fff;
+  }
+
+  &.resgate {
+    background-color: #facd48;
+    color: black;
+  }
+}
+
+.botao-hist {
+  display: inline-block;
+  background-color: #14ba94;
+  padding: 4px 10px;
+  border-radius: 8px;
+  margin: 7px 0;
+  width: 55px;
+  text-align: center;
+  cursor: pointer;
+  &.mobile {
+    width: 25px;
+  }
+}
+
+.search-icon {
+  position: absolute;
+  left: 24px;
+  z-index: 1;
+  top: 13px;
+  color: #b6b6b6c9;
+}
+.search-icon-location {
+  position: absolute;
+  right: 15px;
+  z-index: 1;
+  top: 13px;
+  color: #b6b6b6c9;
+}
+
+.confirm-title,
+.confirm-message,
+div {
+  color: #303030;
+  // font-size: 20px;
+  display: block;
+}
+
+.name-container {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.confirm-message {
+  font-size: 18px;
+}
+
+.refresh-icon {
+  color: #6ef87e;
+  font-size: 17px;
+  vertical-align: middle;
+  cursor: pointer;
+  height: 17px;
+  margin-left: 16px;
+  font-size: 24px;
+}
+
+.refresh-icon:hover {
+  color: #61d86f;
+}
+mat-checkbox {
+  position: relative;
+  left: -13px;
+}
+
+.view-options-container {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.hide {
+  display: none;
+}
+
+label {
+  font-size: 13px;
+  color: #fff;
+}
+
+.search-location-container {
+  position: fixed;
+  right: 20px;
+  z-index: 3;
+  top: 85px;
+}
+
+.detail-user-container {
+  display: flex;
+  align-items: end;
+
+  img{
+    margin-right: 8px;
+  }
+}
+
+
+.search-location-input {
+  width: 294px;
+  height: 48px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 1px 4px grey;
+  outline: none;
+  color: grey;
+  padding: 0 20px;
+}
+
+.recenter-container {
+  position: fixed;
+  right: 23px;
+  background-color: #fff;
+  z-index: 3;
+  width: 50px;
+  bottom: 25px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0px 1px 4px grey;
+}
+
+.block-history{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.block-button {
+  background-color: #de342f;
+}
+
+.alerta-container {
+  background-color: #202722;
+  height: 88px;
+  margin: 2px 0;
+  padding: 16px;
+  box-sizing: border-box;
+  align-items: center;
+  display: flex;
+}
+
+.alert-title-ctn {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.alert-title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+  .search-location-container {
+    position: fixed;
+    right: 30px;
+    z-index: 4;
+    top: 85px;
+    input{
+      width: 200px;
+    }
+  }
+
+  .moto-detail {
+    p,
+    span {
+      font-size: 9px;
+    }
+    padding: 4px;
+    width: calc(100% - 9px);
+  }
+
+  .botao-bloquear {
+    margin-top: 8px;
+  }
+  .botao-hist {
+    margin-top: 8px;
+  }
+  .search-icon-location {
+    display: none;
+  }
+  .search-location-input {
+    display: none;
+
+    &.showLocationFinder {
+      display: block;
+    }
+  }
+}
+

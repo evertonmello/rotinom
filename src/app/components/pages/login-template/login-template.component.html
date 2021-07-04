@@ -1,0 +1,56 @@
+<div class="login">
+    <div class="logo-container">
+        <img src="assets/img/novo-logo@2x.png" width="110" height="110" alt="" style="margin-bottom: 10px;">
+        <mat-card-title> M O N I T O R</mat-card-title>
+    </div>
+
+    <div class="loginContainer">
+        <div *ngIf="!resetPass">
+            <mat-card-content>
+                <form [formGroup]="form">
+                    <div class="email-input-ctn" >
+                        <label for="">Seu email</label>
+                        <input type="text" placeholder="Seu E-mail" class="input-email" formControlName="email">
+                    </div>
+                    <br>
+                    <div class="password-input-ctn" >
+                        <label for="">Sua senha</label>
+                        <input type="{{passWordType}}" placeholder="Senha" class="password-input" formControlName="password">
+                        <mat-icon (click)="setPasswordView()" *ngIf="passWordType == 'text'" class="olhoSenha">
+                            visibility
+                        </mat-icon>
+                        <mat-icon (click)="setPasswordView()" *ngIf="passWordType == 'password'" class="olhoSenha">
+                            visibility_off
+                        </mat-icon>
+                    </div>
+                    <p class="md-input reset">
+                        <br>
+                    </p>
+                    <button (click)="login()" mat-button class="login-btn"
+                        [ngClass]="{'enabled': form.status == 'VALID'}">
+                        <span *ngIf="!showLoader">FAZER LOGIN</span>
+                        <mat-spinner *ngIf="showLoader" diameter="20"></mat-spinner>
+                    </button>
+                </form>
+            </mat-card-content>
+        </div>
+
+        <form [formGroup]="restSenha" *ngIf="resetPass" class="loginBox c">
+            <h3>Insira seu E-mail e um número de celular para envio do SMS</h3>
+            <p>
+                <mat-form-field>
+                    <input type="email" matInput formControlName="email" placeholder="E-mail">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                    <input type="number" matInput formControlName="celular" placeholder="Celular">
+                </mat-form-field>
+                <button type="submit" [disabled]="!restSenha.valid" mat-button class="login-btn">
+                    Recuperar Senha
+                </button>
+                <br>
+                <span (click)="resetPass = false">Voltar</span>
+            </p>
+        </form>
+    </div>
+</div>

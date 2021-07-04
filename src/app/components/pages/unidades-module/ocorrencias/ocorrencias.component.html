@@ -1,0 +1,130 @@
+<div class="overlay">
+    <div class="main-ctn-modal">
+        <mat-icon (click)="close()">cancel</mat-icon>
+        <div *ngIf="showOccurrenceIni && !ocorrenciaAtual && !showLoader">
+            <h1>Ocorrências</h1>
+            <h2>Nao ha ocorrências</h2>
+            <button mat-raised-button color="primary" (click)="showOccurrenceIni = false">Criar</button>
+        </div>
+        <div *ngIf="!showOccurrenceIni && !ocorrenciaAtual && !showLoader">
+            <h1>Nova Ocorrência</h1>
+            <mat-form-field>
+                <mat-label>Data da ocorrências</mat-label>
+                <input matInput [(ngModel)]="dataOcorrencia" [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Data da comunicacao</mat-label>
+                <input matInput [(ngModel)]="dataComunicacao" [matDatepicker]="picker2">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Ocorrências</mat-label>
+                <mat-select [(ngModel)]="occurrenceSelected">
+                    <mat-option *ngFor="let occurrence of occurrences" [value]="occurrence.label">
+                        {{occurrence.label}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button mat-raised-button [disabled]="!dataOcorrencia || !dataComunicacao || !occurrenceSelected"
+                color="primary" (click)="addNewOcorrencia()">
+                <span *ngIf="!showLoader">Confirmar</span>
+                <mat-spinner *ngIf="showLoader" diameter=25></mat-spinner>
+            </button>
+        </div>
+        <div *ngIf="ocorrenciaAtual && !showLoader" [formGroup]="ocorrenciaUpdateForm">
+            <h1>Detalhes Ocorrência</h1>
+            <h3>{{'Id: ' +veiculoSelct.id + ' - Placa: ' + veiculoSelct.placa}}</h3>
+            <div class="ocorrencia-status-ctn">
+                <span>Data da Ocorrência - {{ocorrenciaAtual.dataOcorrencia | date : 'shortDate'}}</span>
+                <span>Data da Comunicação - {{ocorrenciaAtual.dataComunicacao | date : 'shortDate'}}</span>
+                <span>Ocorrência - {{ocorrenciaAtual.ocorrenciaTipo}}</span>
+            </div>
+            <div *ngIf="ocorrenciaAtual.ocorrenciaTipo == 'Furto' || ocorrenciaAtual.ocorrenciaTipo == 'Roubo'">
+                <mat-form-field>
+                    <mat-label>Data da Recuperacao</mat-label>
+                    <input matInput formControlName="dataRecuperacao" [matDatepicker]="picker3">
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Rua:</mat-label>
+                    <input matInput formControlName="rua" placeholder="Digite o endereco com numero">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Numero:</mat-label>
+                    <input matInput formControlName="numero" placeholder="Digite o endereco com numero">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Bairro:</mat-label>
+                    <input matInput formControlName="bairro" placeholder="Digite o endereco com numero">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Cidade:</mat-label>
+                    <input matInput formControlName="cidade" placeholder="Digite o endereco com numero">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>UF:</mat-label>
+                    <input matInput formControlName="uf" placeholder="Digite o endereco com numero">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Complemento:</mat-label>
+                    <input matInput formControlName="complemento" placeholder="Digite o endereco com numero">
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Custo de Recuperação:</mat-label>
+                    <input type="number" formControlName="custoRecuperacao" matInput placeholder="R$0,00">
+                </mat-form-field>
+                <button mat-raised-button (click)="updateOcorrencia()"
+                    [disabled]="ocorrenciaUpdateForm.status == 'INVALID'" color="primary">Alterar</button>
+            </div>
+
+            <div *ngIf="ocorrenciaAtual.ocorrenciaTipo == 'Acidente'">
+                <h3>Informações do terceiro</h3>
+                <form [formGroup]="acidentForm">
+                    <mat-form-field>
+                        <mat-label>Nome:</mat-label>
+                        <input matInput formControlName="nomeTerceiro">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Placa do Veículo</mat-label>
+                        <input matInput formControlName="placaTerceiro" placeholder="Digite o endereco com numero">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Cor do Veículo</mat-label>
+                        <input matInput formControlName="corCarroTerceiro" placeholder="Digite o endereco com numero">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Modelo do Veículo</mat-label>
+                        <input matInput formControlName="modeloCarroTerceiro"
+                            placeholder="Digite o endereco com numero">
+                    </mat-form-field>
+                    <div class="ipt-ctn" >
+                        <span class="label-upload" >Cópia do B.O.</span>
+                        <input  [(ngModel)]="file" formControlName="docBo" (change)="fileChange($event,'docBo')" type="file">
+                        <mat-icon  class="upload-icon"> attach_file</mat-icon>
+                    </div>
+                    <div class="ipt-ctn">
+                        <span class="label-upload" >Documento do Terceiro</span>
+                        <input  [(ngModel)]="docTerceiro" formControlName="docTerceiro"  (change)="fileChange($event,'docTerceiro')" type="file">
+                        <mat-icon  class="upload-icon"> attach_file</mat-icon>
+                    </div>
+                    <div class="ipt-ctn">
+                        <span class="label-upload" >Documento do Veículo do Terceiro</span>
+                        <input  [(ngModel)]="docVeicTerc" formControlName="docVeicTerc"  (change)="fileChange($event,'docVeicTerc')" type="file">
+                        <mat-icon  class="upload-icon"> attach_file</mat-icon>
+                    </div>
+                </form>
+                <button (click)="updateOcorrenciaAcidadente()" mat-raised-button color="primary"
+                    [disabled]="acidentForm.status == 'INVALID'">Confirmar</button>
+            </div>
+        </div>
+
+        <div *ngIf="showLoader">
+            <mat-spinner></mat-spinner>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<div  class="confirm-overlay">
+    <div class="block-confirm-box">
+        <span class="confirm-title">{{veiculoSelecionado?.iotSituacao == 'Bloqueado'? 'Desbloquear' :'Bloquear' }}
+            Veículo</span>
+
+        <span class="confirm-message">Tem certeza que deseja
+            {{veiculoSelecionado?.iotSituacao == 'Bloqueado'? 'Desbloquear' :'Bloquear' }} o veículo?</span>
+        <br>
+        <div class="block-detail">
+            <div>
+                <span>Placa</span>
+                <span>{{veiculoSelecionado?.placa}}</span>
+            </div>
+            <div>
+                <span>Usuário</span>
+                <span>{{veiculoSelecionado?.responsavelNome}}</span>
+            </div>
+        </div>
+        <mat-label>Motivo</mat-label>
+        <mat-select [(ngModel)]="motivo">
+            <mat-option [value]="'INADIMPLENCIA'">INADIMPLÊNCIA</mat-option>
+            <mat-option [value]="'MANUTENCAO'">MANUTENÇÃO</mat-option>
+            <mat-option [value]="'MAUUSO'">MAU USO</mat-option>
+            <mat-option [value]="'ROUBO/FURTO'">ROUBO/FURTO</mat-option>
+            <mat-option [value]="'PAGAMENTO'">PAGAMENTO</mat-option>
+            <mat-option [value]="'AGENDAMENTO'">AGENDAMENTO</mat-option>
+            <mat-option [value]="'RECOLHIDA'">RECOLHIMENTO</mat-option>
+            <mat-option [value]="'EXTRAVIO-BORABORA'">EXTRAVIO BORA BORA</mat-option>
+        </mat-select>
+        <button *ngIf="veiculoSelecionado?.iotSituacao == 'Desbloqueado'" (click)="bloquear()"
+            class="botao-bloquear btn-confirma_block">SIM, CONTINUAR</button>
+        <button *ngIf="veiculoSelecionado?.iotSituacao != 'Desbloqueado'" (click)="desbloquear()"
+            class="botao-bloquear btn-confirma_block">SIM, CONTINUAR</button>
+        <span (click)="cancelar()" class="cancelar-btn">Cancelar</span>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+.overlay {
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.487);
+    top: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-ctn-modal {
+    width: 550px;
+    padding: 40px 0;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 15px;
+    max-height: 85%;
+    overflow: auto;
+    div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    mat-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+    }
+}
+
+.ocorrencia-status-ctn {
+    span {
+        background-color: #f5f5f5;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 8px;
+    }
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    margin-top: 16px;
+}
+
+mat-spinner {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.label-upload {
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 20px;
+}
+
+.ipt-ctn {
+    position: relative;
+    cursor: pointer;
+    input {
+        opacity: 0 !important;
+        cursor: pointer;
+    }
+}
+
+.upload-icon {
+    position: absolute;
+    top: 0 !important;
+    left: 0 !important;
+    left: 100px;
+    font-size: 17px;
+}

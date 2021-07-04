@@ -1,0 +1,112 @@
+@font-face {
+  font-family: "Ubuntu-Regular";
+  src: url("assets/fonts/Ubuntu-Regular.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: "Ubuntu-Bold";
+  src: url("assets/fonts/Ubuntu-Bold.ttf") format("opentype");
+}
+
+.mat-slide-toggle-bar{
+  background-color: grey;
+}
+
+.mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
+  display: none !important;
+}
+
+b{
+  font-family: "Ubuntu-Bold"
+}
+
+.mat-step-header .mat-step-label, .mat-step-header .mat-step-optional{
+  color: black!important;
+}
+
+.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit{
+  background-color: rgba(0, 0, 0, 0.54)
+}
+
+.mat-radio-outer-circle {
+  .mat-radio-checked & {
+    border-color: #13ba94 !important;
+  }
+}
+
+.mat-radio-inner-circle {
+  background-color: #13ba94 !important;
+}
+
+.mat-radio-ripple .mat-ripple-element {
+  background-color: rgba(#13ba94, 0.26) !important;
+}
+
+.mat-tab-body-wrapper,
+mat-tab-body,
+.mat-tab-body-content {
+  height: 100% !important;
+}
+
+.mat-tab-body-wrapper {
+  height: 100% !important;
+}
+
+mat-tab-group {
+  height: 100% !important;
+}
+
+
+.mat-dialog-actions {
+  float: right;
+}
+
+.md-drppicker {
+  left: 0 !important;
+}
+
+.md-drppicker td.active,
+.md-drppicker td.active:hover,
+.md-drppicker .btn {
+  background-color: #13ba94 !important;
+}
+
+.mat-checkbox-inner-container{
+  margin-left: 15px!important;
+}
+
+.lg-input {
+  width: 400px;
+}
+.md-input {
+  width: 200px;
+}
+.sm-input {
+  width: 120px;
+}
+.xs-input {
+  width: 80px;
+}
+
+mat-form-field{
+  margin-right: 10px;
+}
+
+.loader-ctn {
+  position: absolute;
+  width: 100%;
+  background-color: #ffffff52;
+  height: 100%;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 7;
+  display: flex!important;
+}
+
+*{
+  font-family: Ubuntu-Regular;
+  font-weight: normal;
+}
+

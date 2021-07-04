@@ -1,0 +1,269 @@
+<div class="main-monitor">
+    <div class="lista-container" [ngClass]="{'hiden': !showSideBar}">
+        <div (click)="setSideBarView()" class="show-hide-ctn" [ngClass]="{'hiden': !showSideBar }">
+            <mat-icon *ngIf="showSideBar">keyboard_arrow_left</mat-icon>
+            <mat-icon *ngIf="!showSideBar">keyboard_arrow_right</mat-icon>
+        </div>
+        <div class="tab-container" [ngClass]="{'hide': !showSideBar}">
+            <div *ngIf="!showDetalhe">
+                <mat-icon class="search-icon">search</mat-icon>
+                <input [(ngModel)]="veiculoSelecionadoPesq" [value]="veiculoSelecionadoPesq || ''" type="text"
+                    placeholder="Pesquise por nome, placa ou usuarioId" (keyup)="_filter($event.target.value)"
+                    class="input-container">
+                <div class="veiculosStatus">
+                    <label for="cars">Filtro:</label>
+                    <select (change)="setFilter(true)" [(ngModel)]="filterSelected" name="cars" id="cars">
+                        <option value="all">Todas as motos</option>
+                        <option value="alerts">Alertas</option>
+                        <option value="locked">Bloqueadas</option>
+                        <option value="unlocked">Desbloqueadas</option>
+                        <option value="lockOrder">Ordem Bloqueio Enviado</option>
+                        <option value="unlockOrder">Ordem Desbloqueio Enviado</option>
+                        <option value="rented">Alugadas</option>
+                        <option value="onCourse">Em Trânsito</option>
+                        <option value="received">Recebido de Fábrica</option>
+                        <option value="ready">Pronto Para Aluguel</option>
+                        <option value="maintenance">Manutenção</option>
+                    </select>
+                    <img (click)="refresh()" src="assets/img/update.svg" class="refresh-icon" alt="atualizar">
+                    <div class="view-options-container">
+                        <input (change)="setVehiclesView()" [(ngModel)]="showAllvehicles" class="ipt-support"
+                            id="showAll" type="checkbox">
+                        <label for="showAll">Motos</label>
+                        <input (change)="getVeiculosSuportes()" [(ngModel)]="showSupportVehicles" class="ipt-support"
+                            id="showSupport" type="checkbox">
+                        <label for="showSupport">Veículos Suporte</label>
+                        <input (change)="getVeiculosReserva()" [(ngModel)]="showReserveVehicles" class="ipt-support"
+                            id="showReserve" type="checkbox">
+                        <label for="showReserve">Motos Reserva</label>                        
+                    </div>
+                </div>
+            </div>
+            <div class="radio-container" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                [scrollWindow]="false" (scrolled)="manageScroll()">
+                <div *ngFor="let placa of filteredVehicleBasicInfo " class="veiculo-item"
+                    [ngClass]="{'detalhe': showDetalhe}">
+                    <div *ngIf="placa" (click)="searchVeiculo(placa)" style="padding: 16px 24px;">
+                        <div class="name-container">
+                            <img *ngIf="placa.situacaoIot == 10" width="14" height="16" src="assets/img/lock@2x.png" alt="">
+                            <img *ngIf="placa.situacaoIot == 0" width="16" height="16" src="assets/img/lock-open@2x.png" alt="">
+                            <img *ngIf="placa.situacaoIot == 20" src="assets/img/clock-lock@2x.png" width="16" height="16" alt="">
+                            <img *ngIf="placa.situacaoIot == 30" src="assets/img/clock@2x.png" width="16" height="16" alt="">
+                            <span class="desc-veiculo name"> {{placa.locatarioId + ' - ' + placa.locatarioNome}} </span>
+                        </div>
+                        <span class="desc-veiculo placa">{{placa?.placa}}</span><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div *ngIf="!auth.isSupportUser" class="map-container" [ngClass]="{'hiden': !showSideBar}">
+        <agm-map *ngIf="showAllvehicles && !showDetalhe || showSupportVehicles || showReserveVehicles" [latitude]="lat" [longitude]="lng"
+            [zoom]="zoom" (zoomChange)="setZoom($event)" [styles]="mapStyles" (mapReady)="onMapLoad($event)">
+            <agm-marker-cluster [gridSize]="80" [imagePath]="clusterPath">
+                <div *ngFor="let veiculo of veiculosPlotMap">
+                    <agm-marker (markerClick)="searchVeiculo(veiculo)" [markerClickable]="true"
+                        [latitude]="veiculo.latitude" [longitude]="veiculo.longitude" [iconUrl]="{
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                            scale: 3,
+                            fillColor: veiculo.iotSituacaoId == 10? 'red' : 'green',
+                            fillOpacity: 0.8,
+                            strokeWeight: 1,
+                            rotation: veiculo.angulo
+                        }">
+                    </agm-marker>
+                </div>
+            </agm-marker-cluster>
+            <div *ngIf="showSupportVehicles">
+                <agm-marker *ngFor="let veiculo of supportVehicles" (markerClick)="showSupportDetail(veiculo)"
+                    [markerClickable]="true" [latitude]="veiculo.latitude" [longitude]="veiculo.longitude" [iconUrl]="{ url: 'assets/img/support.svg',scaledSize: {
+                        width: 50,
+                        height: 50
+                    }}">
+                </agm-marker>
+            </div>
+            <div *ngIf="showReserveVehicles">
+                <agm-marker *ngFor="let veiculo of reserveVehicles " (markerClick)="searchVeiculo(veiculo)"
+                    [markerClickable]="true" [latitude]="veiculo.latitude" [longitude]="veiculo.longitude" [iconUrl]="{ url: 'assets/img/reserve.svg',scaledSize: {
+                        width: 50,
+                        height: 50
+                    }}">
+                </agm-marker>
+            </div>            
+        </agm-map>
+        <agm-map *ngIf="!showAllvehicles || showDetalhe" [latitude]="lat" [longitude]="lng" [zoom]="zoom"
+            (zoomChange)="setZoom($event)" [styles]="mapStyles" (mapReady)="onMapLoad($event)">
+            <agm-marker-cluster *ngIf="!auth.isSupportUser" [gridSize]="80" [imagePath]="clusterPath">
+                <div *ngFor="let veiculo of veiculosPlotMap">
+                    <agm-marker (markerClick)="detalheVeiculo(veiculo)" [markerClickable]="true"
+                        [latitude]="veiculo.latitude" [longitude]="veiculo.longitude" [iconUrl]="{
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                            scale: 3,
+                            fillColor: veiculo.iotSituacaoId == 10? 'red' : 'green',
+                            fillOpacity: 0.8,
+                            strokeWeight: 1,
+                            rotation: veiculo.angulo
+                        }">
+                    </agm-marker>
+                </div>
+            </agm-marker-cluster>
+            <div *ngIf="showDetalhe">
+                <agm-polyline *ngFor="let point of historicoCoordinates;let i = index;" [strokeColor]="point.color"
+                    [strokeWeight]="1">
+                    <agm-polyline-point [latitude]="point.lat" [longitude]="point.lng">
+                    </agm-polyline-point>
+                    <ng-container *ngIf="historicoCoordinates[i+1]">
+                        <agm-polyline-point [latitude]="historicoCoordinates[i+1].lat"
+                            [longitude]="historicoCoordinates[i+1].lng">
+                        </agm-polyline-point>
+                        <agm-icon-sequence [fixedRotation]="false" [repeat]="'50px'" [offset]="100"
+                            [path]="'FORWARD_CLOSED_ARROW'">
+                        </agm-icon-sequence>
+                    </ng-container>
+                </agm-polyline>
+            </div>
+        </agm-map>
+        <div *ngIf="showDetalhe && veiculoSelecionado" class="moto-detail" [ngClass]="{'show': showDetalhe}">
+            <div class="moto-detail-item">
+                <div class="detail-user-container">
+                    <img *ngIf="veiculoSelecionado.iotSituacaoId == 10" width="14" height="16"
+                        src="assets/img/lock@2x.png" alt="">
+                    <img *ngIf="veiculoSelecionado.iotSituacaoId == 0" width="16" height="16"
+                        src="assets/img/lock-open@2x.png" alt="">
+                    <img *ngIf="veiculoSelecionado.iotSituacaoId == 20" src="assets/img/clock-lock@2x.png" width="16"
+                        height="16" alt="">
+                    <img *ngIf="veiculoSelecionado.iotSituacaoId == 30" src="assets/img/clock@2x.png" width="16"
+                        height="16" alt="">
+                    <a href="https://admin.mottu.com.br/CustomerSuccess?usuarioId={{veiculoSelecionado?.responsavelId}}"
+                        target="_blank">
+                        <span class="detail link">
+                            {{veiculoSelecionado?.responsavelNome || veiculoSelecionado?.apelido}} -
+                            {{ veiculoSelecionado?.responsavelId || veiculoSelecionado?.veiculoSuporteId}}
+                        </span>
+                    </a>
+                </div>
+                <span class="detail">Situação do veículo: {{veiculoSelecionado.situacao}}</span>
+                <span class="detail">Placa: {{veiculoSelecionado?.placa ||
+                    veiculoSelecionado?.veiculoSuportePlaca}}</span>
+                <span title="Abrir Conversa no Whatsapp" (click)="abriWhatsapp()" class="detail mapsLink"
+                    style="cursor: pointer;display: contents;text-decoration: underline;">
+                    {{veiculoSelecionado?.responsavelTelefone}}
+                </span>
+                <img *ngIf="veiculoSelecionado?.responsavelTelefone" src="assets/img/whatsapp-logo-icone.png" width="12"
+                    alt="" style="vertical-align: -5%;">
+                <div *ngIf="veiculoSelecionado?.veiculoSuportePlaca" class="support-container">
+                    <span>Operando: {{veiculoSelecionado.operando? 'Sim': 'Não'}}</span>
+                    <span>SuporteManutencao: {{veiculoSelecionado.suporteManutencao? 'Sim': 'Não'}}</span>
+                    <span>SuporteRecolhimento: {{veiculoSelecionado.suporteRecolhimento? 'Sim': 'Não'}}</span>
+                    <span>SuporteReposicao: {{veiculoSelecionado.suporteReposicao? 'Sim': 'Não'}}</span>
+                    <span>SuporteRoubo: {{veiculoSelecionado.suporteRoubo? 'Sim': 'Não'}}</span>
+                </div>
+            </div>
+            <div class="moto-detail-item">
+              <span class="detail">Data último Ping: {{ultimaAtualizacao || veiculoSelecionado.localizadorData}}</span><br>
+              <span class="detail">Output 1: {{ veiculoSelecionado.output1? 'Acionada':'Não Acionada'}}</span>
+              <span class="detail">Output 2: {{veiculoSelecionado.output2? 'Acionada':'Não Acionada'}}</span>
+              <span class="detail">Ignição: {{ veiculoSelecionado.bateriaPrincipal > 14? 'Ligada':'Não Ligada'}}</span>
+              <span class="detail">Bateria Principal: {{ veiculoSelecionado.bateriaPrincipal}}</span>
+              <a target="_blank" class="google-link" href="{{getGoogleUrl()}}">
+                <p>
+                  <b class="google-link">Localização Google</b> <img src="assets/img/maps.png" width="12" alt="">
+                </p>
+              </a>
+            </div>
+            <div *ngIf="veiculoSelecionado.responsavelId" class="moto-detail-item">
+                <p class="detail-title">Histórico de Localização</p>
+                <div class="calendar-container">
+                    <mat-form-field class="calendar">
+                        <mat-label>Selecione o período</mat-label>
+                        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                            <input matStartDate formControlName="start" placeholder="Data Início">
+                            <input matEndDate formControlName="end" placeholder="Data Fim">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker maxRange=7 #picker></mat-date-range-picker>
+                    </mat-form-field>
+                    <button (click)="getVeiculoHistorico(veiculoSelecionado)" mat-raised-button
+                        [disabled]="!range.valid">Buscar</button>
+                </div>
+                <br>
+            </div>
+            <div *ngIf="veiculoSelecionado.responsavelId"
+                class="moto-detail-item estimativa">
+                <span>Estimativa Resgate </span>
+                <span class="botao-bloquear estimar" [ngClass]="{'mobile': !showSideBar}">ESTIMAR</span>
+            </div>
+            <div *ngIf="veiculoSelecionado.responsavelId"
+                class="moto-detail-item alerta">
+                <p class="detail-title">Alertas</p>
+                <div style="display: flex;
+                justify-content: space-between;">
+                    <div>
+                        <p><b>Total de Alertas</b> </p>
+                        <span class="detail">{{totalAlertas}}</span><br>
+                    </div>
+                    <div>
+                        <p><b>Último Alerta</b> </p>
+                        <span class="detail">{{ultimoAlerta}}</span>
+                        <span class="detail">{{alertaDesc}}</span>
+                    </div>
+                </div>
+                <div class="alertas-container">
+                    <div *ngFor="let alerta of veiculoAlertas" class="alerta-container">
+                        <div class="alert-title-ctn">
+
+                            <span class="alert-title">
+                                <img src="assets/img/exclamation-triangle@2x.png" width="16" height="14" alt="">
+                                {{alerta.veiculoEventoTipoNome}}
+                            </span>
+                            <span> {{alerta.dataUltilmaOcorrencia | date:'medium' }}</span>
+                        </div>
+                        <div>
+                            <span>Resolver</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="moto-detail-item">
+                <span (click)="openBlockHistory()" class="block-history">Histórico de Ordens de Bloqueio</span>
+            </div>
+            <div class="back-container">
+                <mat-icon (click)="fecharDetalhe()" class="closeIco" [ngClass]="{'hiden': !showSideBar }">
+                    keyboard_backspace
+                </mat-icon>
+            </div>
+            <div *ngIf="veiculoSelecionado.responsavelId" class="block-buttons-container">
+                <span (click)="setResgateView()" class="botao-bloquear resgate"
+                    [ngClass]="{'mobile': !showSideBar}">SERVIÇO</span>
+                <a (click)="showConfirm(false)" class="botao-bloquear"
+                    [ngClass]="{'mobile': !showSideBar, 'block-button' : veiculoSelecionado?.iotSituacao == 'Desbloqueado'}">
+                    {{veiculoSelecionado?.iotSituacao != 'Desbloqueado' ? 'DESBLOQUEAR' :'BLOQUEAR' }}</a>
+
+                <a *ngIf="veiculoSelecionado?.iotSituacao != 'Desbloqueado' " (click)="showConfirm(true)"
+                    class="botao-bloquear"
+                    [ngClass]="{'mobile': !showSideBar, 'block-button' : veiculoSelecionado?.iotSituacao == 'Desbloqueado'}">
+                    DESBLOQUEAR POR 1H</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>
+
+<app-block-modal *ngIf="showConfirmDialog" [veiculoSelecionado]="veiculoSelecionado"
+[oneHourBlock]="oneHourBlock" (getV)="setDiaogModel()"></app-block-modal>
+
+<div class="search-location-container">
+    <input type="text" id="autocompleteMonitor" class="search-location-input" [ngClass]="{'showLocationFinder': !showSideBar}"
+        placeholder="Digite um endereço com número">
+    <mat-icon class="search-icon-location">search</mat-icon>
+</div>
+
+<div *ngIf="showDetalhe" (click)="recenter()" class="recenter-container">
+    <mat-icon> near_me</mat-icon>
+</div>
+
+<app-resgate-form *ngIf="resgateForm" [veiculoData]="veiculoSelecionado" (closeResgateForm)="setResgateView()">
+</app-resgate-form>

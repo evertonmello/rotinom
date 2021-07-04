@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="73.164" height="70.463" viewBox="0 0 73.164 70.463" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>.a { fill: rgb(189, 22, 12); stroke: rgb(255, 255, 255); stroke-width: 2px; }
+.b { fill: rgb(255, 255, 255); }
+.c { filter: url("#c"); }
+.d { filter: url("#a"); }</style>
+    <filter id="a" x="0" y="0" width="66.017" height="66.017" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feFlood flood-color="#125bb1"/>
+      <feComposite operator="in" in2="b"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="c" x="33.946" y="30.671" width="39.218" height="39.792" filterUnits="userSpaceOnUse">
+      <feOffset input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="3" result="d"/>
+      <feFlood flood-opacity="0.604"/>
+      <feComposite operator="in" in2="d"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g transform="translate(-399.897 638.95) rotate(-68)">
+    <g class="d" transform="matrix(0.37, 0.93, -0.93, 0.37, 742.23, 131.42)">
+      <circle class="a" cx="16" cy="16" r="16" transform="translate(55.61 31.82) rotate(132)"/>
+    </g>
+    <g class="c" transform="matrix(0.37, 0.93, -0.93, 0.37, 742.23, 131.42)">
+      <path class="b" d="M302.368,282.627H283.26L292.8,271.28Z" transform="translate(455.3 18.28) rotate(132)"/>
+    </g>
+    <path class="b" d="M15.082,15.659a.912.912,0,0,1-.729-.365L8,6.89l-6.354,8.4a.911.911,0,0,1-1.1.286.92.92,0,0,1-.534-1.007L2.431,1.03A1.242,1.242,0,0,1,4.645.494h0L8,4.932,11.354.494a1.242,1.242,0,0,1,2.215.536l2.417,13.544a.92.92,0,0,1-.9,1.085M3.659,1.185l-.02,0a.058.058,0,0,0-.049.052L1.366,13.706l5.893-7.8-3.552-4.7a.056.056,0,0,0-.048-.027M8.74,5.911l5.893,7.8L12.408,1.24a.065.065,0,0,0-.117-.028Z" transform="translate(728.077 164.502) rotate(68)"/>
+  </g>
+</svg>

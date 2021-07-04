@@ -1,0 +1,8 @@
+<div class="main-container" >
+    <h2>Selecione o Veículo</h2>
+    <select [(ngModel)]="veiculoSelecionado" >
+        <option *ngFor="let veiculo of veiculos" value="{{veiculo.veiculoId}}">{{veiculo.apelido}}</option>
+    </select>
+    <button  (click)="setUSerVeiculo()"
+     mat-raised-button color="primary" [ngClass]="{'disabled': !veiculoSelecionado}">Confirmar</button>
+</div>

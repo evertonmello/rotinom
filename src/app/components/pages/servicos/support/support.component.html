@@ -1,0 +1,126 @@
+<div *ngIf="!showDetail && suportUser">
+    <div class="main-ctn">
+        <h1>{{suportUser[0].apelido}}</h1>
+        <h2>Serviços | Término: -</h2>
+        <mat-icon class="update-icon" (click)="getVeiculosResgate()" >update</mat-icon>
+
+        <button (click)="setOnlineOffLine()" class="button-on-off" [ngClass]="{'on': isOnline}">
+            {{isOnline? 'Online': 'Offline'}}
+        </button>
+    </div>
+    <div *ngIf="isOnline" class="cards-container">
+        <div *ngFor="let item of veiculosResgate">
+            <div *ngIf="suportUser[0].veiculoId == item.veiculoSuporteId && item.situacao == 2 ||
+                        suportUser[0].veiculoId == item.veiculoSuporteId && item.situacao == 1 || 
+                        suportUser[0].veiculoId == item.veiculoSuporteId && item.situacao == 11 ||  
+                        suportUser[0].veiculoId == item.veiculoSuporteId && item.situacao == 10"
+                (onload)="removeEmpty()" (click)="select(item)" class="card-support">
+                <span class="user-name">{{item.locatarioNome}}</span>
+                <span>{{item.veiculoResgateGrupoTipoDescricao}} | {{item.veiculoResgateTipoDescricao}}</span>
+                <span class="warning" [ngClass]="{'high': item.prioridade == 2,
+                'medium': item.prioridade == 3,'low': item.prioridade == 4}">
+                    <mat-icon>warning</mat-icon>
+                    <label *ngIf="item.prioridade == 1">Altíssima</label>
+                    <label *ngIf="item.prioridade == 2">Alta</label>
+                    <label *ngIf="item.prioridade == 3">Média</label>
+                    <label *ngIf="item.prioridade == 4">Baixa</label>
+                </span>
+                <span>{{item.veiculoResgateTipoTempo}} min</span>
+                <br>
+                <span>Detalhes do suporte</span>
+                <div class="map-ctn">
+                    <span>Abrir no mapa</span>
+                    <span>Previsão</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!isOnline" class="offline-container">
+        <mat-icon>cloud_off</mat-icon>
+        <span>Fique online para rebeber novos serviços</span>
+    </div>
+    <ng-template #templateName>
+        <div *ngIf="showEmpty" class="offline-container">
+            <mat-icon>build</mat-icon>
+            <span>Aguardando novos serviços..</span>
+        </div>
+    </ng-template>
+</div>
+
+<div *ngIf="showDetail" class="detalhe">
+    <div class="header">
+        <mat-icon (click)="showDetail = false">arrow_back</mat-icon>
+        <h1>DETALHES DO SUPORTE</h1>
+        <div (click)="abriWhatsAppMottu()" class="fone-container">
+            <img src="assets/img/whatsapp-logo-icone.png" width="20" alt="">
+            <span> Fale com a Mottu </span>
+        </div>
+    </div>
+    <div *ngIf="servicoSelecionado" class="info">
+        <div>
+            <span>{{servicoSelecionado.locatarioNome}}</span>
+            <span>ID: {{servicoSelecionado.locatarioId}}</span>
+            <section (click)="openCnh()" class="fotos-container">
+                <mat-icon>camera_alt</mat-icon>
+                Ver Fotos
+            </section>
+        </div>
+        <div>
+            <span>{{servicoSelecionado.veiculoPlaca}}</span>
+            <span>{{servicoSelecionado.veiculoResgateGrupoTipoDescricao}} |
+                {{servicoSelecionado.veiculoResgateTipoDescricao}} </span>
+            <div (click)="abriWhatsapp(servicoSelecionado)" class="fone-container">
+                <img src="assets/img/whatsapp-logo-icone.png" width="20" alt="">
+                <span> {{' ' + servicoSelecionado?.locatarioTelefone?.ddi + servicoSelecionado?.locatarioTelefone?.ddd +
+                    servicoSelecionado.locatarioTelefone?.numero}}</span>
+            </div>
+            <span class="warning" [ngClass]="{'high': servicoSelecionado.prioridade == 2,
+                'medium': servicoSelecionado.prioridade == 3,'low': servicoSelecionado.prioridade == 4}">
+                <mat-icon>warning</mat-icon>
+                <label *ngIf="servicoSelecionado.prioridade == 1">Altíssima</label>
+                <label *ngIf="servicoSelecionado.prioridade == 2">Alta</label>
+                <label *ngIf="servicoSelecionado.prioridade == 3">Média</label>
+                <label *ngIf="servicoSelecionado.prioridade == 4">Baixa</label>
+            </span>
+        </div>
+    </div><br>
+    <div class="info-2-ctn">
+        <span (click)="getGoogleUrl(servicoSelecionado)" class="map-container">
+            <mat-icon class="location-icon">location_on</mat-icon>
+            Abrir no mapa
+        </span>
+        <span>Previsão até o local: {{servicoSelecionado.veiculoResgateTipoTempo}} min</span>
+        <button (click)="addServico()" class="finaliza">Serviço Adicional</button>
+        <span>Observação</span>
+        <span>{{servicoSelecionado.observacao}}
+        </span>
+    </div>
+    <div class="buttons-ctn">
+        <button *ngIf="servicoSelecionado.situacao == 10" (click)="aceitarServico()" class="finaliza">
+            <mat-spinner *ngIf="showLoader" diameter="20"></mat-spinner>
+            <span *ngIf="!showLoader">ACEITAR SERVIÇO</span>
+        </button>
+        <button *ngIf="servicoSelecionado.situacao == 1" (click)="iniciaDeslocamento()" class="finaliza">
+            <mat-spinner *ngIf="showLoader" diameter="20"></mat-spinner>
+            <span *ngIf="!showLoader"> INICIAR DESLOCAMENTO</span>
+        </button>
+        <button *ngIf="servicoSelecionado.situacao == 11" (click)="iniciaAtendimento()" class="finaliza">
+            <mat-spinner *ngIf="showLoader" diameter="20"></mat-spinner>
+            <span *ngIf="!showLoader">INICIAR ATENDIMENTO</span>
+        </button>
+        <button *ngIf="servicoSelecionado.situacao == 11" (click)="cancelaDeslocamento()" class="finaliza">
+            <mat-spinner *ngIf="showLoader" diameter="20"></mat-spinner>
+            <span *ngIf="!showLoader">CANCELAR DESLOCAMENTO</span>
+        </button>
+        <button *ngIf="servicoSelecionado.situacao == 2" (click)="finalizaServico()" class="finaliza">
+            <mat-spinner *ngIf="showLoader" diameter="20"></mat-spinner>
+            <span *ngIf="!showLoader">FINALIZAR SERVIÇO</span>
+        </button>
+        <button (click)="openRejeitaModal()" class="cancela">REJEITAR SERVIÇO</button>
+    </div>
+</div>
+
+
+<div *ngIf="showListLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

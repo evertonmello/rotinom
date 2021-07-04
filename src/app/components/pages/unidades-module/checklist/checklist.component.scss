@@ -1,0 +1,94 @@
+.checklist {
+  text-align: center;
+  width: 700px;
+  padding: 0 60px;
+  height: 470px;
+  background-color: #fff;
+  border-radius: 5px;
+  position: relative;
+  h1 {
+    text-align: center;
+  }
+  
+}
+
+.update-icon{
+  margin-left: 20px;
+    vertical-align: middle;
+    color: #00b131;
+    cursor: pointer;
+}
+
+.close{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+.overlay {
+  left: 0;
+  right: 0;
+  top: 0;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.466);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.test-ctn {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  justify-content: space-between;
+  div {
+    display: flex;
+    align-items: center;
+  }
+
+  button{
+    margin-right: 10px;
+  }
+}
+
+.aprovar-btn{
+  margin-top: 15px;
+}
+.atencao{
+  color: #E8CC2D;
+}
+
+.erro{
+  color: #DD0000;
+}
+
+.check{
+  color: #48c76a;
+}
+
+.test-desc{
+  span{
+    font-size: 12px;
+  }
+  display: grid!important;
+  width: 230px!important;
+}
+
+mat-spinner{
+  margin: 4px 7px;
+}
+
+.localizacao-info{
+  text-align: left;
+  padding-left: 15px;
+  border-left: 1px solid #d8d8d8;
+  div{
+    margin-bottom: 7px;
+  }
+  span{
+    font-size: 13px;
+  }
+}

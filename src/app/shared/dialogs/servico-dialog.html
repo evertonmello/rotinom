@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Qual o motivo da rejeição?</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <input [(ngModel)]="motivo" type="text" matInput placeholder="Digite o motivo">
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button (click)="enviar()" mat-raised-button color="warn" [disabled]="!motivo">Enviar</button>
+</div>

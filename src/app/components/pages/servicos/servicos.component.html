@@ -1,0 +1,106 @@
+<div class="web-ctn">
+    <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [styles]="mapStyles">
+        <agm-marker *ngFor="let veiculoSuporte of veiculosSuporte" [latitude]="veiculoSuporte.latitude"
+            [longitude]="veiculoSuporte.longitude" [iconUrl]="{ url: 'assets/img/support.svg',scaledSize: {
+                width: 50,
+                height: 50
+            }}">
+        </agm-marker>
+        <div *ngFor="let veiculoResgate of veiculosResgate">
+            <!-- <agm-marker [latitude]="veiculoResgate.latitude" [longitude]="veiculoResgate.longitude" [iconUrl]="{
+                path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                scale: 3,
+                fillColor: veiculoResgate.iotSituacaoId == 10? 'red' : 'green',
+                fillOpacity: 0.8,
+                strokeWeight: 1,
+                rotation: veiculoResgate.angulo
+            }">
+            </agm-marker> -->
+        </div>
+    </agm-map>
+
+    <div class="service-bar">
+        <div class="vehicle-ctn">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input (keyup)="_filter($event.target.value)" type="text" name="" id=""
+                placeholder="Pesquise por nome ou placa" class="input-search">
+            <div style="background-color: #202722;border-bottom: 1px solid black;padding: 8px;">
+
+                <select (change)="setFilter($event.target.value)" name="cars" id="cars">
+                    <option value="aberto">Abertos</option>
+                    <option value="aceitos">Aceitos</option>
+                    <option value="encaminhados">Encaminhados</option>
+                    <option value="emrota">Em Rota</option>
+                    <option value="andamento">Em andamento</option>
+                    <option value="finalizado">Finalizados</option>
+                    <option value="cancelados">Cancelados</option>
+                </select>
+            </div>
+            <div class="vehicle-itens">
+                <div (click)="detalheServico(veiculo)" *ngFor="let veiculo of veiculosResgate">
+                    <div class="card-ctn">
+                        <div class="main-info">
+                            <div>
+                                <span><b>{{veiculo.locatarioNome}}</b></span>
+                                <span><b> | {{veiculo.veiculoPlaca}}</b></span>
+                            </div>
+                            <span>{{veiculo.veiculoResgateGrupoTipoDescricao}} | {{veiculo.veiculoResgateTipoDescricao}} </span>
+                            <span class="warning" [ngClass]="{'high': veiculo.prioridade == 2,
+                            'medium': veiculo.prioridade == 3,'low': veiculo.prioridade == 4}">
+                                <mat-icon>warning</mat-icon>
+                                <label *ngIf="veiculo.prioridade == 1 || veiculo.prioridade == 0">Altíssima</label>
+                                <label *ngIf="veiculo.prioridade == 2">Alta</label>
+                                <label *ngIf="veiculo.prioridade == 3 ">Média</label>
+                                <label *ngIf="veiculo.prioridade == 4">Baixa</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <span *ngIf="veiculosResgate?.length == 0" class="empty-msg"> Nenhum serviço </span>
+            </div>
+        </div>
+        <div class="support-vehicles-ctn">
+            <div *ngFor="let veiculoSuporte of veiculosSuporte" class="support-ctn">
+                <div>
+                    <span><b>{{veiculoSuporte.veiculoSuporteApelido}} | {{veiculoSuporte.veiculoSuportePlaca}}</b>
+                    </span>
+                    <div [matTooltip]="veiculoSuporte.online? 'Online -' + getNames(veiculoSuporte.usuariosOnline) : 'Offline' " class="online-icon" [ngClass]="{'off': !veiculoSuporte.online}">
+                        <mat-icon>person</mat-icon>
+                    </div>
+                </div>
+                <div>
+                    <span>{{veiculoSuporte.servicos.length}} serviços | Término: {{veiculoSuporte.termino | date:
+                        'shortTime'}}</span>
+                </div>
+                <br>
+                <div *ngFor="let servico of veiculoSuporte.servicos | sort ;let i = index" class="client-container">
+                    <div class="arrows">
+                        <mat-icon *ngIf="i != 0" (click)="priorizar(servico,veiculoSuporte.veiculoSuporteId)">
+                            arrow_drop_up</mat-icon>
+                        <mat-icon *ngIf="i < veiculoSuporte.servicos.length -1"
+                            (click)="despriorizar(servico,veiculoSuporte.veiculoSuporteId)">arrow_drop_down</mat-icon>
+                    </div>
+                    <div class="desc-ctn">
+                        <span>{{servico?.locatarioNome}}</span>
+                        <span>{{servico?.veiculoPlaca}}</span>
+                    </div>
+                    <div class="remove">
+                        <mat-icon (click)="rejeitar(servico?.id)">cancel</mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-location-container">
+        <input type="text" id="autocomplete" class="search-location-input"
+            [ngClass]="{'showLocationFinder': !showSideBar}" placeholder="Digite um endereço com número">
+        <mat-icon class="search-icon-location">search</mat-icon>
+    </div>
+</div>
+
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>
+<app-support class="app-support-ctn" [veiculosResgate]="inicialVeiculosResgate"></app-support>

@@ -1,0 +1,116 @@
+.loginContainer {
+  // box-shadow: 0px 0px 3px #b1b1b1;
+  width: 370px;
+  text-align: center;
+}
+.olhoSenha {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-size: 15px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.logo-container{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-direction: column;
+  background-color: #000;
+}
+
+mat-card-title {
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+.loader-container {
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+}
+
+.hide {
+  display: none;
+}
+
+mat-card-title {
+  font-family: sans-serif;
+  color: #fff;
+}
+
+label {
+  color: #fff;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.login-btn {
+  background-color: #00b131;
+  color: #fff;
+  border-radius: 20px;
+  position: absolute;
+  right: 55px;
+  bottom: -15px;
+  height: 34px;
+  width: 128px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.email-input-ctn {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  text-align: start;
+}
+
+.input-email {
+  color: #fff;
+  outline: none;
+  background-color: #202722;
+  color: #fff;
+  outline: none;
+  padding: 10px 5px;
+  margin-top: 6px;
+  outline: none;
+  border: 0;
+  border-radius: 5px;
+}
+
+.password-input-ctn {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  position: relative;
+  text-align: start;
+}
+
+.password-input {
+  background-color: #202722;
+  color: #fff;
+  outline: none;
+  background-color: #202722;
+  color: #fff;
+  outline: none;
+  padding: 10px 5px;
+  margin-top: 6px;
+  outline: none;
+  border: 0;
+  border-radius: 5px;
+}

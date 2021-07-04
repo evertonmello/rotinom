@@ -1,0 +1,110 @@
+<div class="main-monitor">
+    <div class="lista-container">
+        <div *ngIf="veiculos" class="tab-container">
+            <span *ngIf="semVeiculosPresgate">Nenhum veículo para resgate no momento</span>
+            <div *ngFor="let item of veiculos">
+                <mat-radio-button *ngIf="item.situacao == 0 || item.situacao == 1 || item.situacao == 2"
+                    (change)="selectVeiculo(item)">
+                    <span class="desc-veiculo placa">{{item.veiculoPlaca}}</span>
+                    <span class="desc-veiculo">- {{item.locatarioNome}} </span>
+                </mat-radio-button>
+            </div>
+        </div>
+    </div>
+
+    <div class="veiculo-historico-container" [ngClass]="{'hide': !showDetalhe}">
+        <h2>Violação</h2>
+        <div class="violacao-ctn">
+            <div *ngFor="let violacao of violacoes" class="violacao-card">
+                <span><b>{{violacao.veiculoEventoTipoNome}} </b> -
+                    {{violacao.dataUltimaOcorrencia | date : 'medium'}}</span>
+            </div>
+        </div>
+        <div style="display: flex;">
+            <h2>Estimativa Suporte </h2>
+            <button (click)="estimarSuporte()" class="item-btn finalizar">ESTIMAR</button>
+        </div>
+        <div class="veiculo-suporte-ctn">
+            <h2 *ngIf="!showVeiculosSuporte && !showEstimarLoader">Clique em "Estimar" para calcular as estimativas de suporte</h2>
+            <div *ngIf="showVeiculosSuporte">
+                <div *ngFor="let veiculoSpt of veiculosSuporte" class="estimativas-opcoes">
+                    {{veiculoSpt.tempo? veiculoSpt.tempo + ' min.': ' - '}}
+                    {{veiculoSpt.veiculoSuportePlaca? veiculoSpt.veiculoSuportePlaca : ' - '}}
+    
+                    <div class="support-option">
+                        <img *ngIf="veiculoSpt.suporteManutencao" src="./../../../../assets/img/manutencao.png" width="22" alt="">
+                        <span *ngIf="!veiculoSpt.suporteManutencao"> - </span>
+                    </div>
+                    
+                    <div class="support-option">
+                        <img *ngIf="veiculoSpt.suporteReposicao" src="./../../../../assets/img/moto.png" width="22" alt="">
+                        <span *ngIf="!veiculoSpt.suporteReposicao"> - </span>
+                    </div>
+                    
+                    <div class="support-option">
+                        <img  *ngIf="veiculoSpt.suporteRecolhimento" src="./../../../../assets/img/guincho.png" width="22" alt="">
+                        <span *ngIf="!veiculoSpt.suporteRecolhimento"> - </span>
+                    </div>
+
+                    <div class="support-option">
+                        <img  *ngIf="veiculoSpt.suporteRoubo" src="./../../../../assets/img/roubo.png" width="22" alt="">
+                        <span *ngIf="!veiculoSpt.suporteRoubo"> - </span>
+                    </div>
+    
+                    <img (click)="setRoute(veiculoSpt)" src="./../../../../assets/img/rota.png" width="22" alt="">
+                </div>
+            </div>
+            <div class="loader-container" [ngClass]="{'hide': !showEstimarLoader}">
+                <mat-spinner diameter="20"></mat-spinner>
+            </div>
+        </div>
+        <h2>Histórico</h2>
+        <div class="historico-ctn">
+            <div class="horas-ctn">
+                <span (click)="getDetalheVeiculos(6)">Últimas 6h</span>
+                <span (click)="getDetalheVeiculos(12)">Últimas 12h</span>
+                <span (click)="getDetalheVeiculos(24)">Últimas 24h</span>
+            </div>
+            <div>
+            </div>
+            <div>
+                <button class="item-btn finalizar">PESQUISAR</button>
+            </div>
+        </div>
+        <div *ngIf="veiculoHistorico" class="timeline-ctn">
+            <div *ngFor="let itemHist of veiculoHistorico" class="endereco-item-ctn">
+                <span class="circulo-timeline"></span>
+                <span class="linha-timeline"></span>
+                <span class="timeline-item-txt">
+                    <b>{{itemHist.dataHoraInicio | date : 'medium'}} -
+                        {{itemHist.dataHoraFim | date : 'mediumTime'}}
+                    </b> <br>
+                    {{itemHist.rua + ', ' + itemHist.numero + ', ' + itemHist.bairro + ', ' +
+                     itemHist.cidade + ' - ' + itemHist.estado}}</span>
+            </div>
+        </div>
+        <button (click)="bloquear()" class="item-btn">BLOQUEAR</button>
+        <button (click)="finalizar()" class="item-btn finalizar">FINALIZAR</button>
+    </div>
+    <div class="map-container" [ngClass]="{'fullscreen': !showDetalhe}">
+        <agm-map [zoom]="zoom" [latitude]="lat" [longitude]="lng">
+            <div>
+                <agm-marker *ngIf="!showRoute && veiculoSelecionado" [latitude]="veiculoSelecionado.enderecoLatitude"
+                    [longitude]="veiculoSelecionado.enderecoLongitude" [iconUrl]="{
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                            scale: 3,
+                            fillColor: 'green',
+                            fillOpacity: 0.8,
+                            strokeWeight: 1
+                        }">
+                </agm-marker>
+                <agm-direction *ngIf="showRoute" [origin]="origin" [waypoints]="wayPointsMap" [destination]="dest">
+                </agm-direction>
+            </div>
+        </agm-map>
+    </div>
+</div>
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

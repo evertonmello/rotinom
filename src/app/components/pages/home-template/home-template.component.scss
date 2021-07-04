@@ -1,0 +1,61 @@
+
+.mottu-toolbar-side {
+  background-color: black;
+  display: none;
+  height: 45px;
+}
+
+.mottu-toolbar{
+  background-color: black;
+  color: #FFF;
+}
+.menu-container {
+  width: 100%;
+}
+img {
+  vertical-align: middle;
+  margin-right: 15px;
+}
+
+.sair {
+  float: right;
+}
+
+mat-icon {
+  display: none;
+}
+
+@media only screen and (max-width: 1000px) {
+  span {
+    display: none;
+  }
+
+  mat-icon {
+    display: block;
+  }
+
+  button {
+    min-width: 15px !important;
+    padding: 0 15px !important;
+    vertical-align: middle;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  span {
+    display: none;
+  }
+
+  mat-icon {
+    display: block;
+  }
+
+  button {
+    min-width: 15px !important;
+    padding: 0 10px !important;
+    vertical-align: middle;
+  }
+}
+
+
+

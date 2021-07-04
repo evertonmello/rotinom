@@ -1,0 +1,47 @@
+<div class="overlay">
+    <form [formGroup]="iotForm" (ngSubmit)="save()">
+        <mat-icon (click)="close()">close</mat-icon>
+        <h1>{{iot? 'Editar Iot': 'Novo Iot'}}</h1>
+
+        <mat-form-field class="input-container">
+            <input formControlName="imei" type="text" matInput placeholder="IMEI" disabled>
+        </mat-form-field>
+        <mat-form-field class="input-container">
+            <mat-label>Placa do veículo</mat-label>
+            <mat-select formControlName="veiculoId"  >
+                <input type="text" matInput placeholder="Digite a placa" (keyup)="_filter($event.target.value)"
+                autocomplete="off" class="search-input">
+                <mat-option *ngIf="iot?.veiculoPlaca" [value]="iot.veiculoPlaca">{{iot.veiculoPlaca}}</mat-option>
+                <mat-option *ngFor="let placa of placasValues" [value]="placa.id">{{placa.placa}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="input-container">
+            <input formControlName="telefone" type="text" matInput placeholder="Telefone">
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Operadora</mat-label>
+            <mat-select formControlName="telefoneOperadora">
+                <mat-option [value]="1">Vivo</mat-option>
+                <mat-option [value]="2">Claro</mat-option>
+                <mat-option [value]="3">Tim</mat-option>
+                <mat-option [value]="4">Oi</mat-option>
+                <mat-option [value]="5">Nextel</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="input-container">
+            <mat-label>Modelo</mat-label>
+            <mat-select formControlName="Modelo">
+                <mat-option [value]="'340'">340</mat-option>
+                <mat-option [value]="'310'">310</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <button  mat-raised-button color="primary" [disabled]="iotForm.status != 'VALID'" class="pesquisar-btn">
+        {{iot? 'Salvar' : 'Cadastrar'}} 
+        </button>
+    </form>
+</div>
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

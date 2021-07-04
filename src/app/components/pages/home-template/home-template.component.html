@@ -1,0 +1,28 @@
+<mat-toolbar class="mottu-toolbar doNotPrint">
+    <div class="menu-container">
+      <img src="assets\img\novo-logo@2x.png" alt="" width="35" height="35">
+      <button *ngIf="!isSupportUser" mat-button [routerLink]="'/home/monitor'"><span>MONITOR</span>
+        <mat-icon>gps_fixed</mat-icon>
+      </button>
+      <button *ngIf="!isSupportUser" mat-button [routerLink]="'/home/alertas'"><span>ALERTAS</span>
+        <mat-icon>warning</mat-icon>
+      </button>
+      <button *ngIf="!isSupportUser" mat-button [routerLink]="'/home/unidades'"><span>UNIDADES</span>
+        <mat-icon>motorcycle</mat-icon>
+      </button>
+      <button mat-button [routerLink]="'/home/servicos'"><span>SERVIÇOS</span>
+        <mat-icon>build</mat-icon>
+      </button>
+      <button *ngIf="isBoraBoraUser"  mat-button [routerLink]="'/home/delivery'"><span>BORABORA</span>
+        <mat-icon> fastfood</mat-icon>
+      </button>
+      <button mat-button (click)="logout()" class="sair">
+        <span>SAIR</span>
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+  
+  <div style="height: calc(100% - 65px);">
+    <router-outlet></router-outlet>
+  </div>

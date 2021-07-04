@@ -1,0 +1,120 @@
+<div class="main-container" >
+    <div class="filtro-container">
+        <div *ngIf="alertas" class="alerta-total">
+            <span><span class="qtd-alert"></span> {{alertas.length}} alertas</span>
+            <button *ngIf="alarme" (click)="alarme = false" class="parar-alarme">Parar Alarme</button>
+        </div>
+        <div class="inputs-ctn">
+            <input type="text" mat-input [linkedCalendars]="true" [locale]="locale" ngxDaterangepickerMd
+                [(ngModel)]="dataSelecionada" class="calendar" placeholder="Selecione uma Data" />
+            <mat-form-field>
+                <mat-label>Situação do Alerta</mat-label>
+                <mat-select [(ngModel)]="filtroStatus" (selectionChange)="getAlertas()">
+                    <mat-option [value]="'30'">Todos</mat-option>
+                    <mat-option [value]="'0'">Novo Alerta</mat-option>
+                    <mat-option [value]="'20'">Em Andamento</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Tipo</mat-label>
+                <mat-select>
+                    <mat-option [value]="'0'">Todos</mat-option>
+                    <mat-checkbox *ngFor="let evento of eventos" [color]="'primary'"
+                        (change)="selectTipo(evento, $event)">
+                        <mat-option [value]="evento">
+                            {{eventosRef[evento]}}
+                        </mat-option>
+                    </mat-checkbox>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="input-container">
+                <input [(ngModel)]="filtroNome" type="text" matInput placeholder="Nome">
+            </mat-form-field>
+            <mat-form-field class="input-container">
+                <input [(ngModel)]="filtroPlaca" type="text" matInput placeholder="Placa">
+            </mat-form-field>
+
+            <button (click)="getAlertas()" mat-raised-button color="primary" class="pesquisar-btn">Pesquisar</button>
+            <button (click)="limpar()" mat-raised-button>limpar</button>
+        </div>
+    </div>
+    <audio *ngIf="alarme" autoplay loop>
+        <source src="assets/audio/siren.mp3" type="audio/mp4" /></audio>
+
+    <div (click)="expandir(alerta)" class="alerta-ctn" *ngFor="let alerta of alertas">
+        <h1>{{alerta[0].placa }} - <span>         
+
+            <ng-container *ngIf="alerta[0].usuarioNome==null; else usuarioNome">
+                Mottu
+            </ng-container>
+            <ng-template #usuarioNome>
+                {{alerta[0].usuarioNome}}
+            </ng-template>          
+
+
+            </span></h1>
+            <!-- Atualização para o futuro depois de resolver o backend
+                <div class="container-alerta">
+                
+                <div>
+                    <ng-container *ngIf="alerta[0].usuarioId != null">
+                        <span> <p>Situação do Usuario: <b>{{alerta[0].parcelasVencidas}}</b></p></span> 
+                        <span> <p>Tempo de contrato: <b> {{alerta[0].dataInicioMottuContrato}}</b></p></span>
+                    </ng-container>                   
+                   
+                    <span> <p>Situação da Moto: <b>Bloqueada</b></p></span>
+                    <br>
+                </div>            
+            </div> -->
+
+        <div class="buttons-ctn">
+            <a target="_blank" [routerLink]="'/home/monitor/' + alerta[0].placa">
+                <button>LOCALIZAR</button>
+            </a>
+            <button (click)="recolher(alerta[0])">RECOLHER</button>
+            <button (click)="bloquear(alerta[0])" class="btn-bloquear">BLOQUEAR</button>
+            <mat-icon *ngIf="veiculoSelected != alerta[0].veiculoId" class="down-icon">keyboard_arrow_down</mat-icon>
+            <mat-icon *ngIf="veiculoSelected == alerta[0].veiculoId" class="down-icon">keyboard_arrow_up</mat-icon>
+        </div>
+
+        <div class="label-container">
+            <h1>{{alerta.length == 1? alerta.length + ' ALERTA' : alerta.length + ' ALERTAS' }}</h1>
+            <div *ngIf="alerta[0].usuarioId != null" class="container-alerta-right">
+                <a href="{{'https://admin.mottu.com.br/CustomerSuccess?usuarioId=' + alerta[0].usuarioId  }}" target="_blank">
+                    <button>LINK PARA CS</button>
+                </a>              
+                             
+                <!--  <span (click)="abriWhatsapp(alerta[0])" class="alerta-items" style="width: fit-content"> <b>Telefone: </b> <u
+                class="wpp">{{alerta[0].usuarioTelefone}}</u> <img src="assets/img/whatsapp-logo-icone.png" alt=""
+                width="12" height="12"> </span><br> -->
+            </div>
+        </div>
+        <div *ngIf="veiculoSelected == alerta[0].veiculoId" class="detalhe-container">
+            <div class="item-detalhe-container">
+                <div *ngFor="let ocorrencia of alerta" class="alerta-item">
+                    <div style="width: 60%;display: inline-block;">
+                        <p>Tipo da violação: <b>{{ ocorrencia.veiculoEventoTipoNome }}</b></p>
+                        <p>Data primeira ocorrência: <b> {{ocorrencia.dataPrimeiraOcorrencia |  date:'medium' }}</b></p>
+                        <p>Data última ocorrência: <b> {{ocorrencia.dataUltilmaOcorrencia |  date:'medium' }}</b></p>
+                        
+                    </div>
+                    <div class="buttons-item-ctn">
+                        <span *ngIf="ocorrencia.veiculoAlertaSituacao == 0" class="novo-alerta">
+                            <mat-icon>update</mat-icon>
+                            Novo Alerta
+                        </span>
+                        <span *ngIf="ocorrencia.veiculoAlertaSituacao == 20" class="novo-alerta andamento">
+                            <mat-icon>add_alert</mat-icon>
+                            Em andamento
+                        </span>
+                        <button (click)="resolver(ocorrencia)">RESOLVER</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 *ngIf="alertas && alertas.length == 0">Nenhum Alerta Encontrado</h1>
+</div>
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

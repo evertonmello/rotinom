@@ -1,0 +1,34 @@
+.main-container {
+  position: relative;
+}
+
+.buttons-container {
+  position: fixed;
+  bottom: 84px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  width: 70%;
+  padding-top: 25px;
+  padding-bottom: 22px;
+}
+
+.input-files {
+  position: absolute;
+  left: 0;
+  width: 165px;
+  height: 35px;
+  opacity: 0;
+}
+
+.image-ctn{
+  width: 320px;
+  cursor: pointer;
+  position: relative;
+
+  mat-icon{
+    position: absolute;
+    right: -10px;
+    top: 0;
+  }
+}

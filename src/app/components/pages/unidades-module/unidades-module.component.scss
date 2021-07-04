@@ -1,0 +1,39 @@
+
+
+.search-bar{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.input-container{
+    width: 100px;
+}
+
+.pesquisar-btn{
+    margin-left: 15px;
+}
+
+table{
+    width: 100%;border-spacing: 0px;
+    border: 1px solid #e6e6e6;
+}
+
+tr{
+    height: 50px;
+}
+
+td,th{
+    padding-left: 10px;
+}
+mat-icon{
+    color: #a3a3a3;
+    cursor: pointer;
+}
+
+tr:nth-child(even) {background: rgb(240, 240, 240)}
+tr:nth-child(odd) {background: #FFF};
+tr:hover{
+    background: #c2c2c2;
+}

@@ -1,0 +1,22 @@
+<div class="main-container" >
+   <div style="flex-wrap: wrap; display: flex;">
+      <img *ngIf="data.cnh" [src]="data.cnh" (click)="openImagemFull(data.cnh)" width="300" alt="" style="margin: 16px;">
+      <img *ngIf="data.selfie" [src]="data.selfie" (click)="openImagemFull(data.selfie)"  width="300" alt="" style="margin: 16px;">
+      <div *ngFor="let item of images"  class="image-ctn" >
+         <mat-icon (click)="remoteImage(item)">cancel</mat-icon>
+         <img (click)="openImagemFull(item.url)" [src]="item.url" width="300" alt="" style="margin: 16px;">
+      </div>
+      <span *ngIf="images?.length == 0">Nenhuma imagem cadastrada no serviço</span>
+   </div>
+   <div class="buttons-container">
+      <div>
+         <button mat-raised-button>Selecionar Arquivos</button>
+         <input [(ngModel)]="file" type="file" (change)="fileChange($event)" name="" id="" class="input-files" >
+
+      </div>
+      <!-- <button (click)="enviar()" mat-raised-button [disabled]="!file" style="float: right;">
+         <span *ngIf="!showLoader">Enviar Fotos</span>
+         <mat-spinner *ngIf="showLoader" diameter="20"></mat-spinner>
+      </button> -->
+   </div>
+</div>

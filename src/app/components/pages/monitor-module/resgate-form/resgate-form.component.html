@@ -1,0 +1,57 @@
+<div class="main">
+    <form [formGroup]="resgateForm">
+        <mat-icon (click)="closeForm()">close</mat-icon>
+
+        <h1>Requisitar serviço</h1>
+        <div class="info-ctn">
+            <h3><b>Cliente:</b> {{veiculoData.responsavelNome}}</h3>
+            <h3><b>Placa:</b> {{veiculoData.placa}}</h3>
+            <h3><b>Id:</b> {{veiculoData.responsavelId}}</h3>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div class="inputs-ctn">
+            <mat-form-field>
+                <mat-label>Serviço</mat-label>
+                <mat-select formControlName="servico">
+                    <mat-option [value]="1"> Suporte de Campo</mat-option>
+                    <mat-option [value]="2">Recolhimento</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Motivo</mat-label>
+                <mat-select formControlName="veiculoResgateTipoId">
+                    <div *ngIf="resgateForm.controls.servico.value == 1">
+                        <mat-option *ngFor="let motivo of motivosSuportCampo" [value]="motivo.value">{{motivo.label}}
+                        </mat-option>
+                    </div>
+                    <div *ngIf="resgateForm.controls.servico.value == 2">
+                        <mat-option *ngFor="let motivo of motivosSuporteRecolhimentio" [value]="motivo.value">{{motivo.label}}
+                        </mat-option>
+                    </div>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Prioridade</mat-label>
+                <mat-select formControlName="prioridade">
+                    <mat-option [value]="1">Altíssima</mat-option>
+                    <mat-option [value]="2">Alta</mat-option>
+                    <mat-option [value]="3">Média</mat-option>
+                    <mat-option [value]="4">Baixa</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Observação:</mat-label>
+                <textarea matInput formControlName="observacao" placeholder="Escreva um comentário"></textarea>
+            </mat-form-field>
+        </div>
+        <button (click)="closeForm()" mat-button color="warn">Cancelar</button>
+        <button (click)="criaNovoResgate()" [disabled]="resgateForm.status != 'VALID'" mat-raised-button color="primary"
+            class="resgate-btn">SOLICITAR SERVIÇO</button>
+    </form>
+</div>
+
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

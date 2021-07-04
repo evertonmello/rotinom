@@ -1,0 +1,186 @@
+<div infiniteScroll [infiniteScrollDistance]="3" [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
+    <mat-tab-group #tabGroup>
+        <mat-tab label="Veículos">
+            <div style="padding: 10px 100px;">
+                <div class="search-bar">
+                    <div>
+                        <span>Total: {{veiculosTotal}}</span>
+                        <button (click)="showNovoVeiculoForm = true" mat-raised-button color="primary"
+                            class="pesquisar-btn">Adicionar
+                            Veículo</button>
+                    </div>
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Situação</mat-label>
+                            <mat-select [(ngModel)]="filtroSituacao">
+                                <mat-option [value]="'1'">Todos </mat-option>
+                                <mat-option [value]="'2'">Alugadas </mat-option>
+                                <mat-option [value]="'3'">Disponíveis </mat-option>
+                                <mat-option [value]="'4'">Manutenção </mat-option>
+                                <mat-option [value]="'5'">SemIot </mat-option>
+                                <mat-option [value]="'6'">Preparaçoão </mat-option>
+                                <mat-option [value]="'7'">Localização </mat-option>
+                                <mat-option [value]="'8'">Recall </mat-option>
+                                <mat-option [value]="'9'">Bloqueadas </mat-option>
+                                <mat-option [value]="'10'">Desbloqueadas </mat-option>
+                                <mat-option [value]="'11'"> Ordem de Bloqueio Pendente </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="input-container">
+                            <input [(ngModel)]="filtroPlaca" type="text" matInput placeholder="Placa">
+                        </mat-form-field>
+                        <mat-form-field class="input-container">
+                            <input [(ngModel)]="filtroId" type="text" matInput placeholder="Id">
+                        </mat-form-field>
+                        <mat-form-field class="input-container">
+                            <input [(ngModel)]="filtroChassi" type="text" matInput placeholder="Chassi">
+                        </mat-form-field>
+                        <mat-form-field class="input-container">
+                            <input [(ngModel)]="filtroRenavam" type="text" matInput placeholder="Renavam">
+                        </mat-form-field>
+                        <button (click)="getVeiculosComFiltro()" mat-raised-button color="primary"
+                            class="pesquisar-btn">Pesquisar</button>
+                    </div>
+
+                </div>
+                <table>
+                    <tr style="text-align: left;">
+                        <th>Id</th>
+                        <th>Placa</th>
+                        <th>Chassi</th>
+                        <th>Renavam</th>
+                        <th>Lot Iot</th>
+                        <th>IMEI</th>
+                        <th>Situação</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr *ngFor="let veiculo of veiculos">
+                        <td>
+                            {{veiculo.id}}
+                        </td>
+                        <td>
+                            {{veiculo.placa}}
+                        </td>
+                        <td>
+                            {{veiculo.chassi}}
+                        </td>
+                        <td>
+                            {{veiculo.renavam}}
+                        </td>
+                        <td>
+                            {{veiculo.iotId}}
+                        </td>
+                        <td>
+                            {{veiculo.imei}}
+                        </td>
+                        <td>
+                            {{veiculo.situacao | situacao}}
+                        </td>
+                        <td>
+                            <mat-icon (click)="openOccurrence(veiculo)" matTooltipPosition="above"
+                                matTooltip="Ocorrencias"> local_car_wash</mat-icon>
+                        </td>
+                        <td>
+                            <mat-icon (click)="editar(veiculo)" matTooltipPosition="above" matTooltip="Editar">edit
+                            </mat-icon>
+                        </td>
+                        <td>
+                            <mat-icon (click)="setVeiculoSelecionado = veiculo" matTooltipPosition="above"
+                                matTooltip="Checklist">check_circle</mat-icon>
+                        </td>
+                        <td>
+                            <mat-icon (click)="geoLocation(veiculo)" matTooltipPosition="above"
+                                matTooltip="Geolocalização">
+                                place</mat-icon>
+                        </td>
+                        <td>
+                            <mat-icon (click)="deletar(veiculo)" matTooltipPosition="above" matTooltip="Deletar">delete
+                            </mat-icon>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </mat-tab>
+        <mat-tab label="Iot">
+            <div style="padding: 10px 100px;">
+                <div class="search-bar">
+                    <div>
+                        <span>Total: {{iotsTotal}}</span>
+                        <button (click)="showNovoIotForm = true" mat-raised-button color="primary"
+                            class="pesquisar-btn">Adicionar
+                            Iot</button>
+                    </div>
+                    <div>
+                        <mat-form-field class="input-container">
+                            <input [(ngModel)]="filtroIdIot" type="text" matInput placeholder="ID">
+                        </mat-form-field>
+                        <mat-form-field class="input-container">
+                            <input [(ngModel)]="filtroImeiIot" type="text" matInput placeholder="IMEI">
+                        </mat-form-field>
+                        <button (click)="getIotssComFiltro()" mat-raised-button color="primary"
+                            class="pesquisar-btn">Pesquisar</button>
+                    </div>
+
+                </div>
+                <table>
+                    <tr style="text-align: left;">
+                        <th>Id</th>
+                        <th>IMEI</th>
+                        <th>Telefone</th>
+                        <th>Operadora</th>
+                        <th>Veículo</th>
+                        <th>Modelo</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr *ngFor="let iot of iots">
+                        <td>
+                            {{iot.id}}
+                        </td>
+                        <td>
+                            {{iot.imei}}
+                        </td>
+                        <td>
+                            {{iot.telefone}}
+                        </td>
+                        <td *ngIf="iot.telefoneOperadora == 1">Vivo</td>
+                        <td *ngIf="iot.telefoneOperadora == 2">Claro</td>
+                        <td *ngIf="iot.telefoneOperadora == 3">Tim</td>
+                        <td *ngIf="!iot.telefoneOperadora">-</td>
+                        <td>
+                            {{iot.veiculoPlaca}}
+                        </td>
+                        <td>
+                            {{iot.modelo}}
+                        </td>
+                        <td>
+                            <mat-icon (click)="editarIot(iot)" matTooltipPosition="above" matTooltip="Editar">edit
+                            </mat-icon>
+                        </td>
+                        <td>
+                            <mat-icon (click)="deletarIot(iot)" matTooltipPosition="above" matTooltip="Deletar">delete
+                            </mat-icon>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>
+<app-iot-form *ngIf="showNovoIotForm" [iot]="iotEdicao" (closeEvt)="showNovoIotForm = false;iotEdicao = null">
+</app-iot-form>
+<app-veiculo-form *ngIf="showNovoVeiculoForm" [veiculo]="veiculoEdicao"
+    (closeEvt)="showNovoVeiculoForm = false;veiculoEdicao = null">
+</app-veiculo-form>
+<checklist *ngIf="setVeiculoSelecionado" (closeEvt)="setVeiculoSelecionado = null" [veiculo]="setVeiculoSelecionado">
+</checklist>
+
+<app-ocorrencias *ngIf="showOccModal" [veiculoSelct]="veiculoSelct" (closeEvt)="showOccModal = false"></app-ocorrencias>

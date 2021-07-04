@@ -1,0 +1,139 @@
+<div *ngIf="!showLoader" class="overlay">
+    <div class="checklist">
+        <h1>Checklist</h1>
+        <h3>Placa: <b>{{veiculo.placa}}</b> - Renavam: <b>{{veiculo.renavam}}</b> 
+            <mat-icon (click)="getStatusTestes();getLocalizacaoInfo()" class="update-icon">refresh</mat-icon>
+        </h3>
+        <mat-icon (click)="close()" class="close">close</mat-icon>
+        <div style="display: flex;">
+            <div style="width: 75%;">
+                <div class="test-ctn">
+                    <div>
+                        <mat-icon *ngIf="testesStatus.gps.sucesso == null" class="atencao">error</mat-icon>
+                        <mat-icon *ngIf="testesStatus.gps.sucesso == false" class="erro">close</mat-icon>
+                        <mat-icon *ngIf="testesStatus.gps.sucesso == true" class="check">check_circle</mat-icon>
+                        <span>Sinal GPS</span>
+                    </div>
+                    <div>
+                        <button (click)="testar('GPS')" mat-raised-button color="primary">
+                            <span *ngIf="!loadingGps">Testar</span>
+                            <mat-spinner *ngIf="loadingGps" diameter="25" color="accent"></mat-spinner>
+                        </button>
+                        <div class="test-desc">
+                            <span>Último teste: <b> {{testesStatus.gps.checkData | date : 'short'}}</b></span>
+                            <span>Operador: {{testesStatus.gps.usuarioEmail}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-ctn">
+                    <div>
+                        <mat-icon *ngIf="testesStatus.bloqueio.sucesso == null" class="atencao">error</mat-icon>
+                        <mat-icon *ngIf="testesStatus.bloqueio.sucesso == false" class="erro">close</mat-icon>
+                        <mat-icon *ngIf="testesStatus.bloqueio.sucesso == true" class="check">check_circle</mat-icon>
+                        <span>Bloqueio de veículo</span>
+                    </div>
+                    <div>
+                        <button (click)="testar('BLOQUEIO')" mat-raised-button color="primary">
+                            <span *ngIf="!loadingBloqueio">Testar</span>
+                            <mat-spinner *ngIf="loadingBloqueio" diameter="25" color="accent"></mat-spinner>
+                        </button>
+                        <div class="test-desc">
+                            <span>Último teste: <b> {{testesStatus.bloqueio.checkData | date : 'short'}}</b></span>
+                            <span>Operador: {{testesStatus.bloqueio.usuarioEmail}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-ctn">
+                    <div>
+                        <mat-icon *ngIf="testesStatus.desbloqueio.sucesso == null" class="atencao">error</mat-icon>
+                        <mat-icon *ngIf="testesStatus.desbloqueio.sucesso == false" class="erro">close</mat-icon>
+                        <mat-icon *ngIf="testesStatus.desbloqueio.sucesso == true" class="check">check_circle</mat-icon>
+                        <span>Desbloqueio de veículo</span>
+                    </div>
+                    <div>
+                        <button (click)="testar('DESBLOQUEIO')" mat-raised-button color="primary">
+                            <span *ngIf="!loadingDesbloqueio">Testar</span>
+                            <mat-spinner *ngIf="loadingDesbloqueio" diameter="25" color="accent"></mat-spinner>
+                        </button>
+                        <div class="test-desc">
+                            <span>Último teste: <b> {{testesStatus.desbloqueio.checkData | date : 'short'}}</b></span>
+                            <span>Operador: {{testesStatus.desbloqueio.usuarioEmail}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-ctn">
+                    <div>
+                        <mat-icon *ngIf="testesStatus.carenagem.sucesso == null" class="atencao">error</mat-icon>
+                        <mat-icon *ngIf="testesStatus.carenagem.sucesso == false" class="erro">close</mat-icon>
+                        <mat-icon *ngIf="testesStatus.carenagem.sucesso == true" class="check">check_circle</mat-icon>
+                        <span>Violação de carenagem</span>
+                    </div>
+                    <div>
+                        <button (click)="testar('CARENAGEM')" mat-raised-button color="primary">
+                            <span *ngIf="!loadingCarenagem">Testar</span>
+                            <mat-spinner *ngIf="loadingCarenagem" diameter="25" color="accent"></mat-spinner>
+                        </button>
+                        <div class="test-desc">
+                            <span>Último teste: <b> {{testesStatus.carenagem.checkData | date : 'short'}}</b></span>
+                            <span>Operador: {{testesStatus.carenagem.usuarioEmail}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-ctn">
+                    <div>
+                        <mat-icon *ngIf="testesStatus.blindagem.sucesso == null" class="atencao">error</mat-icon>
+                        <mat-icon *ngIf="testesStatus.blindagem.sucesso == false" class="erro">close</mat-icon>
+                        <mat-icon *ngIf="testesStatus.blindagem.sucesso == true" class="check">check_circle</mat-icon>
+                        <span>Violação de blindagem</span>
+                    </div>
+                    <div>
+                        <button (click)="testar('BLINDAGEM')" mat-raised-button color="primary">
+                            <span *ngIf="!loadingBlindagem">Testar</span>
+                            <mat-spinner *ngIf="loadingBlindagem" diameter="25" color="accent"></mat-spinner>
+                        </button>
+                        <div class="test-desc">
+                            <span>Último teste: <b> {{testesStatus.blindagem.checkData | date : 'short'}}</b></span>
+                            <span>Operador: {{testesStatus.blindagem.usuarioEmail}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-ctn">
+                    <div>
+                        <mat-icon *ngIf="testesStatus.liberacao.sucesso == null" class="atencao">error</mat-icon>
+                        <mat-icon *ngIf="testesStatus.liberacao.sucesso == false" class="erro">close</mat-icon>
+                        <mat-icon *ngIf="testesStatus.liberacao.sucesso == true" class="check">check_circle</mat-icon>
+                        <span>Liberação</span>
+                    </div>
+                    <div>
+                        <button (click)="testar('LIBERACAO')" mat-raised-button color="primary">
+                            <span *ngIf="!loadingLiberacao">Testar</span>
+                            <mat-spinner *ngIf="loadingLiberacao" diameter="25" color="accent"></mat-spinner>
+                        </button>
+                        <div class="test-desc">
+                            <span>Último teste: <b> {{testesStatus.liberacao.checkData | date : 'short'}}</b></span>
+                            <span>Operador: {{testesStatus.liberacao.usuarioEmail}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="localizacaoInfo" class="localizacao-info">
+                <div><span>Último ping: {{localizacaoInfo.localizadorData | date : 'short'}}</span></div>
+                <div><span>Latituge: {{localizacaoInfo.latitude}}</span></div>
+                <div><span>Longitude: {{localizacaoInfo.longitude}}</span></div>
+                <div><span>Carenagem: {{localizacaoInfo.violacaoCarenagem ? 'Não Violada': 'Violada' || ' - '}}</span></div>
+                <div><span>Blindagem: {{localizacaoInfo.violacaoBlindagem? 'Não Violada': 'Violada' || ' - '}}</span></div>
+                <div><span>Output1: {{localizacaoInfo.output1 | output}}</span></div>
+                <div><span>Output2: {{localizacaoInfo.output2 | output}}</span></div>
+                <div><span>Ignição: {{localizacaoInfo.veiculoLigado? 'Ligada': 'Não ligada' || ' - '}}</span></div>
+                <div><span>Bateria principal: {{localizacaoInfo.bateriaPrincipal}}</span></div>
+                <div><span>Bateria Backup: {{localizacaoInfo.bateriaBackup}}</span></div>
+            </div>
+        </div>
+
+        <button (click)="aprovar()" mat-raised-button color="primary" class="aprovar-btn">Aprovar para Aluguel</button>
+    </div>
+</div>
+
+<div *ngIf="showLoader" class="loader-ctn">
+    <mat-spinner></mat-spinner>
+</div>

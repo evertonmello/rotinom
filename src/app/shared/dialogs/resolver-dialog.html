@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Resolver Alerta</h1>
+<div mat-dialog-content>
+    <mat-form-field style="width: 100%;">
+        <textarea [(ngModel)]="comentario" matInput placeholder="Escreva um comentário"></textarea>
+      </mat-form-field></div>
+<div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="comentario" cdkFocusInitial>ENVIAR COMENTÁRIO E RESOLVER ALERTA</button>
+    <button  mat-button (click)="onNoClick()" cdkFocusInitial>CANCELAR</button>
+</div>
